@@ -11,6 +11,8 @@ import { InvitadoVerLibroPresenter } from "./components/invitado-ver-libro/invit
 import { AdminVerLibroPresenter } from "./components/admin-ver-libro/admin-ver-libro-presenter.mjs";
 import { ClienteVerLibroPresenter } from "./components/cliente-ver-libro/cliente-ver-libro-presenter.mjs"
 
+import { InvitadoIngresoPresenter } from "./components/invitado-ingreso/invitado-ingreso-presenter.mjs";
+
 // import { CatalogoPresenter } from "./components/catalogo/catalogo-presenter.mjs";
 // import { AgregarLibroPresenter } from "./components/agregar-libro/agregar-libro-presenter.mjs";
 
@@ -27,6 +29,8 @@ export function init() {
   router.register(/^\/libreria\/invitado-ver-libro.html/, new InvitadoVerLibroPresenter(model, 'invitado-ver-libro'));
   router.register(/^\/libreria\/admin-ver-libro.html/, new AdminVerLibroPresenter(model, 'admin-ver-libro'))
   router.register(/^\/libreria\/cliente-ver-libro.html/, new ClienteVerLibroPresenter(model, 'cliente-ver-libro'))
+
+  router.register(/^\/libreria\/invitado-ingreso.html/, new InvitadoIngresoPresenter(model, 'invitado-ingreso'))
   
 
   // router.register(/^\/libreria\/home.html$/, new HomePresenter(model, 'home'));
