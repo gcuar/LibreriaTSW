@@ -32,6 +32,7 @@ export function init() {
   router.register(/^\/libreria\/admin-ver-libro.html/, new AdminVerLibroPresenter(model, 'admin-ver-libro'));
 
   router.register(/^\/libreria\/cliente-ver-libro.html/, new ClienteVerLibroPresenter(model, 'cliente-ver-libro'));
+  //router.register(/^\/libreria\/cliente-carro.html/, new CarroPresenter(model, 'cliente-carro'));
 
 
   router.handleLocation();
