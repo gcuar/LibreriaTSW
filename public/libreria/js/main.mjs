@@ -12,7 +12,10 @@ import { InvitadoIngresoPresenter } from "./components/invitado-ingreso/invitado
 import { ClienteHomePresenter } from "./components/cliente-home/cliente-home-presenter.mjs";
 import { AdminHomePresenter } from "./components/admin-home/admin-home-presenter.mjs";
 
+import { ClienteCarroPresenter } from "./components/cliente-carro/cliente-carro-presenter.mjs";
+
 import { ClienteVerLibroPresenter } from "./components/cliente-ver-libro/cliente-ver-libro-presenter.mjs";
+import { AdminPerfilPresenter } from "./components/admin-perfil/admin-perfil-presenter.mjs";
 
 export function init() {
   seed();
@@ -32,6 +35,8 @@ export function init() {
   router.register(/^\/libreria\/admin-ver-libro.html/, new AdminVerLibroPresenter(model, 'admin-ver-libro'));
 
   router.register(/^\/libreria\/cliente-ver-libro.html/, new ClienteVerLibroPresenter(model, 'cliente-ver-libro'));
+  router.register(/^\/libreria\/cliente-carro.html/, new ClienteCarroPresenter(model, 'cliente-carro'));
+  router.register(/^\/libreria\/admin-perfil.html/, new AdminPerfilPresenter(model, 'admin-perfil'));
 
 
   router.handleLocation();
