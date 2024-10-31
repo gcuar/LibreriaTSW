@@ -57,6 +57,13 @@ export class AdminModificarLibroPresenter extends Presenter {
         stock: parseInt(this.stockInput.value),
         precio: parseFloat(this.precioInput.value)
       };
+
+      console.log("libroActualizado:", libroActualizado); // Debug line
+
+      if (!libroActualizado._id || !libroActualizado.isbn || !libroActualizado.titulo) {
+        throw new Error("Missing fields in libroActualizado"); // Add a specific error for missing fields
+      }
+
       model.updateLibro(libroActualizado);
       this.mensajesPresenter.mensaje('¡Libro modificado con éxito!');
       router.navigate('/libreria/admin-home.html');
