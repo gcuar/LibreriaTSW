@@ -2,7 +2,4 @@
 ### Elías Lucas Monsalve 
 ### Ángel Barceló Parada
 ### Gloria Cuadros García
-
-
-
-Champi estuvo aquí.
+### Alejandro Ramos Moreno
