@@ -2,6 +2,7 @@ import { Presenter } from "../../commons/presenter.mjs";
 import { router } from "../../commons/router.mjs";
 import { model } from "../../model/model.mjs";
 import { MensajesPresenter } from "../mensajes/mensajes-presenter.mjs";
+import { libreriaSession } from "../../commons/libreria-session.mjs";
 
 export class ClienteVerLibroPresenter extends Presenter {
   constructor(model, view) {
@@ -17,19 +18,20 @@ export class ClienteVerLibroPresenter extends Presenter {
     return this.searchParams.get('id');
   }
 
-  // para acceder al modelo, siempre con métodos, no con getters!
+  // Acceder al libro desde el modelo
   getLibro() {
     return model.getLibroPorId(this.id);
   }
 
+  // Getters y setters para los elementos del DOM
   get isbnText() {
-    console.log(document);
     return document.querySelector('#isbnText');
   }
 
   set isbn(isbn) {
     this.isbnText.textContent = isbn;
   }
+
   get tituloText() {
     return document.querySelector('#tituloText');
   }
@@ -37,6 +39,7 @@ export class ClienteVerLibroPresenter extends Presenter {
   set titulo(titulo) {
     this.tituloText.textContent = titulo;
   }
+
   get autoresText() {
     return document.querySelector('#autoresText');
   }
@@ -52,6 +55,7 @@ export class ClienteVerLibroPresenter extends Presenter {
   set resumen(resumen) {
     this.resumenText.textContent = resumen;
   }
+
   get precioText() {
     return document.querySelector('#precioText');
   }
@@ -68,13 +72,30 @@ export class ClienteVerLibroPresenter extends Presenter {
     this.stockText.textContent = stock;
   }
 
+  // Obtener referencia al botón "Agregar al carro"
+  // get agregarCarritoButton() {
+  //   return document.querySelector('#agregarCarritoButton');
+  // }
 
-  añadirCarroClick(event) {
+  get agregarCarritoButton() {
+      return document.querySelector('#agregarAlCarroLink');
+  }
+
+  // Método para agregar el libro al carro con cantidad 1
+  agregarAlCarroClick(event) {
     event.preventDefault();
     try {
-      model.addClienteCarroItem(this.id);
-      this.mensajesPresenter.mensaje('Libro añadido con éxito.');
-      router.navigate('/libreria/cliente-carro.html')
+      const clienteId = libreriaSession.getUsuarioId();
+      if (!clienteId) {
+        throw new Error('Usuario no autenticado');
+      }
+      const item = {
+        libro: this.id,
+        cantidad: 1
+      };
+      model.addClienteCarroItem(clienteId, item);
+      this.mensajesPresenter.mensaje('Libro añadido al carro con éxito.');
+      this.mensajesPresenter.refresh();
     } catch (e) {
       console.error(e);
       this.mensajesPresenter.error(e.message);
@@ -82,6 +103,7 @@ export class ClienteVerLibroPresenter extends Presenter {
     }
   }
 
+  // Asignar los datos del libro a los elementos del DOM
   set libro(libro) {
     this.isbn = libro.isbn;
     this.titulo = libro.titulo;
@@ -94,27 +116,25 @@ export class ClienteVerLibroPresenter extends Presenter {
   async refresh() {
     await super.refresh();
     await this.mensajesPresenter.refresh();
-    console.log(this.id);
-    let libro = this.getLibro();
-    if (libro) this.libro = libro;
-    else console.error(`Libro ${id} not found!`);
 
+    // Verificar que el usuario es un cliente autenticado
+    if (!libreriaSession.esCliente()) {
+      this.mensajesPresenter.error('Acceso no autorizado');
+      router.navigate('/libreria/home.html');
+      return;
+    }
 
-    //hacer lo de añadir libro al carro :D
-    //console.log()
+    const libro = this.getLibro();
+    if (libro) {
+      this.libro = libro;
+    } else {
+      console.error(`Libro ${this.id} no encontrado`);
+      this.mensajesPresenter.error('Libro no encontrado');
+      this.mensajesPresenter.refresh();
+      return;
+    }
 
-    // console.log(libro.borrado)
-    // console.log(this.borrarLink)
-    // if (!!libro.borrado)
-    //   this.borrarLink.parentElement.classList.add('oculto');
-    // this.borrarLink.onclick = event => this.borrarClick(event);
-    // if (!libro.borrado)
-    //   this.desborrarLink.parentElement.classList.add('oculto');
-    // this.desborrarLink.onclick = event => this.desborrarClick(event);
-    // cuidado no asignar directamente el método, se pierde this!
-    // document.querySelector('#agregarButton').onclick = event => this.agregarClick(event);
-    // let self = this;
-    // document.querySelector('#agregarButton').onclick = function (event) { self.agregarClick(event) };
+    // Asignar el evento al botón "Agregar al carro"
+    this.agregarCarritoButton.onclick = event => this.agregarAlCarroClick(event);
   }
-
 }
