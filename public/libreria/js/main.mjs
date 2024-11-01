@@ -14,7 +14,8 @@ import { AdminHomePresenter } from "./components/admin-home/admin-home-presenter
 import { ClienteCarroPresenter } from "./components/cliente-carro/cliente-carro-presenter.mjs";
 import { ClienteVerLibroPresenter } from "./components/cliente-ver-libro/cliente-ver-libro-presenter.mjs";
 import { AdminModificarLibroPresenter } from "./components/admin-modificar-libro/admin-modificar-libro-presenter.mjs";
-import { ClienteCarroPresenter } from "./components/cliente-carro/cliente-carro-presenter.mjs";
+
+
 
 export function init() {
   seed();
