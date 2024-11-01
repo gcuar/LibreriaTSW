@@ -65,9 +65,11 @@ export class Libreria {
     return libro;
   }
 
-
   updateLibro(obj) {
     let libro = this.getLibroPorId(obj._id);
+    if (!libro) {
+      throw new Error(`No se encontró un libro con el ID: ${obj._id}`);
+    }
     Object.assign(libro, obj);
     return libro;
   }
