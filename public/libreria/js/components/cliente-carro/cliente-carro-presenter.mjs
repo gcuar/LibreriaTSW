@@ -43,8 +43,12 @@ export class ClienteCarroPresenter extends Presenter {
     return document.querySelector('#total');
   }
 
+  // get comprarButton() {
+  //   return document.querySelector('#comprarButton');
+  // }
+
   get comprarButton() {
-    return document.querySelector('#comprarButton');
+    return document.querySelector('#comprarLink');
   }
 
   // Método para renderizar los ítems del carro en la tabla

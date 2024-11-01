@@ -73,8 +73,12 @@ export class ClienteVerLibroPresenter extends Presenter {
   }
 
   // Obtener referencia al botón "Agregar al carro"
+  // get agregarCarritoButton() {
+  //   return document.querySelector('#agregarCarritoButton');
+  // }
+
   get agregarCarritoButton() {
-    return document.querySelector('#agregarCarritoButton');
+      return document.querySelector('#agregarAlCarroLink');
   }
 
   // Método para agregar el libro al carro con cantidad 1
