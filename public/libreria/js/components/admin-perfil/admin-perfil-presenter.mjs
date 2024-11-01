@@ -51,7 +51,7 @@ export class AdminPerfilPresenter extends Presenter {
   async loadUser() {
     console.log("Ejecutando load...");
   
-    //const usuarioActual = JSON.parse(localStorage.getItem('usuarioActual') || '{}');
+    
     const adminID = libreriaSession.getUsuarioId();
     const user2 = model.getAdminPorId(adminID);
     
@@ -80,9 +80,7 @@ export class AdminPerfilPresenter extends Presenter {
 
   async modificarAdminClick(event) {
     event.preventDefault();
-        //Alternativa:
-          /*const usuarioActual = JSON.parse(localStorage.getItem('usuarioActual') || '{}');
-          const user2 = model.getAdministradorPorEmail(usuarioActual.email);*/
+        
     const adminID = libreriaSession.getUsuarioId();
     const user2 = model.getAdminPorId(adminID);
 
@@ -102,14 +100,13 @@ export class AdminPerfilPresenter extends Presenter {
     try {
         model.updateAdmin(adminData, adminID); // Llamada al modelo para actualizar el administrador
         this.mensajesPresenter.mensaje('Administrador modificado!');
-        //alternativa:
-            //Guarda el usuario en localStorage para mantener la sesión activa
-            localStorage.setItem('usuarioActual', JSON.stringify(user2));
-            const usuarioActual2 = JSON.parse(localStorage.getItem('usuarioActual'));
-            console.log(usuarioActual2);
+        
+        localStorage.setItem('usuarioActual', JSON.stringify(user2));
+        const usuarioActual2 = JSON.parse(localStorage.getItem('usuarioActual'));
+        console.log(usuarioActual2);
         
 
-        router.navigate('/libreria/admin-home.html'); // Redireccionar tras modificar
+        router.navigate('/libreria/admin-home.html'); 
     } catch (err) {
         console.log(err);
         this.mensajesPresenter.error(err.message);
@@ -123,7 +120,7 @@ async refresh() {
     await this.mensajesPresenter.refresh();
     await this.loadUser();
     
-    this.modificarButton.onclick = event => this.modificarAdminClick(event); // Asignar la función al botón de modificar
+    this.modificarButton.onclick = event => this.modificarAdminClick(event); 
 }
 
 }
