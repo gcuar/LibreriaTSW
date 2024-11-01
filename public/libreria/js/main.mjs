@@ -13,6 +13,7 @@ import { ClienteHomePresenter } from "./components/cliente-home/cliente-home-pre
 import { AdminHomePresenter } from "./components/admin-home/admin-home-presenter.mjs";
 
 import { ClienteVerLibroPresenter } from "./components/cliente-ver-libro/cliente-ver-libro-presenter.mjs";
+import { ClienteCarroPresenter } from './components/cliente-carro/cliente-carro-presenter.mjs';
 
 export function init() {
   seed();
@@ -33,6 +34,7 @@ export function init() {
 
   router.register(/^\/libreria\/cliente-ver-libro.html/, new ClienteVerLibroPresenter(model, 'cliente-ver-libro'));
 
+  router.register(/^\/libreria\/cliente-carro\.html$/, new ClienteCarroPresenter(model, 'cliente-carro'));
 
   router.handleLocation();
 }

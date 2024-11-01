@@ -35,6 +35,9 @@ export class Libreria {
     if (this.getLibroPorIsbn(obj.isbn)) throw new Error(`El ISBN ${obj.isbn} ya existe`)
     let libro = new Libro();
     Object.assign(libro, obj);
+    // Convertir precio y stock a números
+    libro.precio = parseFloat(libro.precio);
+    libro.stock = parseInt(libro.stock);
     libro.assignId();
     this.libros.push(libro);
     return libro;
@@ -151,10 +154,13 @@ export class Libreria {
     else throw new Error('Error en la contraseña');
   }
 
-  addClienteCarroItem(id, item) {
-    item.libro = this.getLibroPorId(item.libro);
-    item = this.getClientePorId(id).addCarroItem(item);
-    return item;
+  addClienteCarroItem(clienteId, item) {
+    let cliente = this.getClientePorId(clienteId);
+    if (!cliente) throw new Error('Cliente no encontrado');
+    let libro = this.getLibroPorId(item.libro);
+    if (!libro) throw new Error('Libro no encontrado');
+    item.libro = libro;
+    cliente.addCarroItem(item);
   }
 
   setClienteCarroItemCantidad(id, index, cantidad) {
@@ -366,9 +372,13 @@ class Carro {
     this.calcular();
   }
 
-  removeItems() {
-    this.items = [];
-    calcular();
+  borrarItem(index) {
+    if (index >= 0 && index < this.items.length) {
+      this.items.splice(index, 1);
+      this.calcular();
+    } else {
+      throw new Error('Índice de ítem inválido');
+    }
   }
   calcular() {
     this.subtotal = this.items.reduce((total, i) => total + i.total, 0);
