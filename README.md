@@ -3,7 +3,3 @@
 ### Ángel Barceló Parada
 ### Gloria Cuadros García
 ### Alejandro Ramos Moreno
-
-
-
-Champi estuvo aquí.
