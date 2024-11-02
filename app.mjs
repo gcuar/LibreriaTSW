@@ -11,7 +11,7 @@ const app = express();
 app.use('/', express.static(path.join(STATIC_DIR, 'public')));
 
 app.use('/libreria*', (req, res) => {
- res.sendFile(path.join(STATIC_DIR, 'public/libreria/home.html'));
+ res.sendFile(path.join(STATIC_DIR, 'public/libreria/index.html'));
 });
   
 app.all('*', function (req, res, next) {

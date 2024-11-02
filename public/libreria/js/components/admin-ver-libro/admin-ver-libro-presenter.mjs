@@ -102,6 +102,20 @@ export class AdminVerLibroPresenter extends Presenter {
     }
   }
 
+  modificarLink() {
+    return document.querySelector('#modificarLink');
+  }
+
+  setModificarLink(libroID) {
+    console.log(`Libro ${libroID} enter modification!`);
+    let node = this.modificarLink(); 
+    if (node) { 
+        node.setAttribute('href', `/libreria/admin-modificar-libro.html?id=${libroID}`);
+    } else {
+        console.error('No se encuentra el libro en el DOM.');
+    }
+  }
+
   set libro(libro) {
     this.isbn = libro.isbn;
     this.titulo = libro.titulo;
@@ -111,6 +125,8 @@ export class AdminVerLibroPresenter extends Presenter {
     this.precio = libro.precio;
   }
 
+
+
   async refresh() {
     await super.refresh();
     await this.mensajesPresenter.refresh();
@@ -118,15 +134,26 @@ export class AdminVerLibroPresenter extends Presenter {
     let libro = this.getLibro();
     if (libro) this.libro = libro;
     else console.error(`Libro ${id} not found!`);
+    
 
-    console.log(libro.borrado)
-    console.log(this.borrarLink)
+    this.setModificarLink(this.id);
+    // this.modificarLink.onclick = event => this.modificarClick(event);
+
+    console.log(this.id);
+
+    // console.log(libro.borrado)
+    // console.log(this.borrarLink)
+
     if (!!libro.borrado)
       this.borrarLink.parentElement.classList.add('oculto');
     this.borrarLink.onclick = event => this.borrarClick(event);
-    if (!libro.borrado)
-      this.desborrarLink.parentElement.classList.add('oculto');
-    this.desborrarLink.onclick = event => this.desborrarClick(event);
+
+    
+
+    // if (!libro.borrado)
+    //   this.desborrarLink.parentElement.classList.add('oculto');
+    // this.desborrarLink.onclick = event => this.desborrarClick(event);
+
     // cuidado no asignar directamente el método, se pierde this!
     // document.querySelector('#agregarButton').onclick = event => this.agregarClick(event);
     // let self = this;

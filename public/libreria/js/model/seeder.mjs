@@ -44,7 +44,7 @@ export function seed() {
   let libros = ISBNS.map(isbn => crearLibro(isbn));
   libros.forEach(l => model.addLibro(l));
 
-  const A_DNIS = ['00000000A', '00000001A', '00000002A', '00000003A', '00000004A'];
+  const A_DNIS = ['00000000A', '00000001A', '00000002A', '00000003A', '00000004A', '00000000C'];
   let admins = A_DNIS.map(dni => crearAdmin(dni));
   admins.forEach(a => model.addUsuario(a));
 

@@ -1,60 +1,75 @@
-<header>
-  <h1>Tecnologías y Sistemas Web 24/25</h1>
-  <h2>Administrador Ver Libro</h2>
-</header>
-<article>
-  <nav class="navbar">
-    <ul>
-      <li><a id="homeLink" href="cliente-home.html">Inicio</a></li>      
-      <li><a id="facturasLink" href="cliente-facturas.html">Facturas</a></li>
-      <li><a id="salirLink" href="home.html">Salir</a></li>
-    </ul>
-  </nav>
-  <div class="contenido">
-    <div class="info">
-      <div class="mensajes-container" id="mensajesContainer"></div>
-      <!-- <div id="catalogo" class="catalogo"></div>    -->
-      <div id="detalle" class="detalle">
-        <img class="portada" src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==">
-        <p>
-          <label for="isbnText">ISBN:</label>
-          <span id="isbnText"></span>
-        </p>
-        <p>
-          <label for="tituloText">Título:</label>
-          <span id="tituloText"></span>
-        </p>
-        <p>
-          <label for="autoresText">Autores:</label>
-          <span id="autoresText"></span>
-        </p>
-        <p>
-          <label for="resumenText">Resumen:</label>
-        <div id="resumenText"></div>
-        </p>
-        <p>
-          <label for="stockText">Stock:</label>
-          <span id="stockText"> </span>
-        </p>
-        <p>
-          <label for="precioText">Precio €:</label>
-          <span id="precioText"></span>
-        </p>
-      </div>
-    </div>
-    <nav class="toolbar">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cliente Ver Libro</title>
+  <!-- Puedes enlazar un archivo CSS si lo deseas -->
+  <!-- <link rel="stylesheet" href="styles.css"> -->
+</head>
+<body data-view="cliente-ver-libro">
+  <header>
+    <h1>Tecnologías y Sistemas Web 24/25</h1>
+    <h2>Cliente Ver Libro</h2>
+  </header>
+  <article>
+    <nav class="navbar">
       <ul>
-        <li><a id="agregarCarritoLink" href="cliente-carro.html">Agregar al carro</a></li>
+        <li><a id="homeLink" href="cliente-home.html">Inicio</a></li>
+        <li><a id="carroLink" href="cliente-carro.html">Carro</a></li>
+        <li><a id="facturasLink" href="cliente-facturas.html">Facturas</a></li>
+        <li><a id="salirLink" href="home.html">Salir</a></li>
       </ul>
     </nav>
-    <footer>
-      Ángel Barceló Parada<br>
-      Gloria Cuadros García<br>
-      Elías Lucas Monsalve<br>
-      Alejandro Ramos Moreno<br>
-      Tecnologías y Sistemas Web 24/25<br>
-      Universidad de Castilla-La Mancha<br>
-      <small>Octubre de 2024</small>
-    </footer>
-  </div>
-</article>
+    <div class="contenido">
+      <div class="info">
+        <div class="mensajes-container" id="mensajesContainer"></div>
+        <!-- Detalles del libro -->
+        <div id="detalle" class="detalle">
+          <img class="portada" src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==">
+          <p>
+            <label for="isbnText">ISBN:</label>
+            <span id="isbnText"></span>
+          </p>
+          <p>
+            <label for="tituloText">Título:</label>
+            <span id="tituloText"></span>
+          </p>
+          <p>
+            <label for="autoresText">Autores:</label>
+            <span id="autoresText"></span>
+          </p>
+          <p>
+            <label for="resumenText">Resumen:</label>
+            <div id="resumenText"></div>
+          </p>
+          <p>
+            <label for="stockText">Stock:</label>
+            <span id="stockText"></span>
+          </p>
+          <p>
+            <label for="precioText">Precio €:</label>
+            <span id="precioText"></span>
+          </p>
+        </div>
+      </div>
+      <nav class="toolbar">
+        <ul>
+          <!-- Cambiamos el enlace por un botón y ajustamos el id -->
+          <!-- <li><button id="agregarCarritoButton">Agregar al carro</button></li> -->
+          <li><a id="agregarAlCarroLink" href=>Añadir al carro</a></li>
+
+        </ul>
+      </nav>
+      <footer>
+        Ángel Barceló Parada<br>
+        Gloria Cuadros García<br>
+        Elías Lucas Monsalve<br>
+        Alejandro Ramos Moreno<br>
+        Tecnologías y Sistemas Web 24/25<br>
+        Universidad de Castilla-La Mancha<br>
+        <small>Octubre de 2024</small>
+      </footer>
+    </div>
+  </article>
+</body>
+</html>
