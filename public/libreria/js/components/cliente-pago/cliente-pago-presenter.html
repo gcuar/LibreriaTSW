@@ -25,43 +25,35 @@
         <!-- Contenedor para mensajes -->
         <div class="mensajes-container" id="mensajesContainer"></div>
 
-        <!-- Formulario de datos de facturación -->
-    <div id="datosFacturacion">
-        <form id="pagoForm">
-        <!-- Agrupamos Fecha y DNI en una sola fila -->
-        <div class="fila">
-            <div class="campo" style="flex: 1; margin-right: 10px;">
-            <label for="fecha">Fecha:</label>
-            <input type="text" id="fecha" name="fecha" readonly>
-            </div>
-            <div class="campo" style="flex: 1;">
-            <label for="dni">DNI:</label>
-            <input type="text" id="dni" name="dni" readonly>
-            </div>
-        </div>
-        <!-- Razón Social -->
-        <div class="fila">
-            <div class="campo" style="flex: 1;">
-            <label for="razonSocial">Razón Social:</label>
-            <input type="text" id="razonSocial" name="razonSocial">
-            </div>
-        </div>
-        <!-- Dirección -->
-        <div class="fila">
-            <div class="campo" style="flex: 1;">
-            <label for="direccion">Dirección:</label>
-            <input type="text" id="direccion" name="direccion">
-            </div>
-        </div>
-        <!-- Email -->
-        <div class="fila">
-            <div class="campo" style="flex: 1;">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email">
-            </div>
-        </div>
-        </form>
-    </div>
+        <!-- Formulario de datos de facturación --> 
+        <!-- <div id="datosFacturacion"> -->
+            <form id="pagoForm" class="formPago">
+
+              <div class="fedn">
+                <label for="fecha">Fecha:</label>
+                <input type="text" id="fecha" name="fecha" readonly>
+            
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni" readonly>
+              </div><br>
+
+              <!-- <label for="fecha">Fecha</label>
+              <input type="text" id="fecha" name="fecha" readonly>
+
+              <label for="dni">DNI:</label>
+              <input type="text" id="dni" name="dni" readonly><br> -->
+
+              <label for="razonSocial">Razón Social:</label>
+              <input type="text" id="razonSocial" name="razonSocial">
+
+              <label for="direccion">Dirección:</label>
+              <input type="text" id="direccion" name="direccion">
+
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email"><br>
+
+            </form>
+        <!-- </div> -->
 
         <!-- Tabla del carro de compras -->
         <div id="carro" class="carro">
