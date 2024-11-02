@@ -1,3 +1,5 @@
+import { libreriaSession } from "../commons/libreria-session.mjs";
+
 export const ROL = {
   ADMIN: "ADMIN",
   CLIENTE: "CLIENTE",
@@ -164,6 +166,43 @@ export class Libreria {
     item.libro = libro;
     cliente.addCarroItem(item);
   }
+
+  getAdminPorId(id) {
+    return this.usuarios.find(u => u.rol == ROL.ADMIN && u._id == id);
+  }
+
+
+  updateAdmin(adminData, adminID) {
+    // Buscar el administrador existente por su ID o email
+    let admin =  this.getAdminPorId(adminID);
+  
+    // Si no se encuentra el administrador, lanzar un error
+    if (!admin) throw new Error('Administrador no encontrado');
+
+    // Actualizar los datos del administrador con los nuevos valores de adminData
+    libreriaSession.setUsuarioId(adminID);
+    Object.assign(admin, adminData);
+  
+    // Retornar el administrador actualizado como confirmación
+    return admin;
+  }
+
+  updateCliente(clienteData, clienteID) {
+    // Buscar el cliente existente por su ID o email
+    let cliente =  this.getClientePorId(clienteID);
+  
+    // Si no se encuentra el cliente, lanzar un error
+    if (!cliente) throw new Error('Cliente no encontrado');
+
+    // Actualizar los datos del cliente con los nuevos valores de clienteData
+    libreriaSession.setUsuarioId(clienteID);
+    console.log("ID en sesión después de setUsuarioId:", sessionStorage.getItem("USUARIO_ID"));
+    Object.assign(cliente, clienteData);
+  
+    // Retornar el cliente actualizado como confirmación
+    return cliente;
+  }
+
 
   setClienteCarroItemCantidad(id, index, cantidad) {
     let cliente = this.getClientePorId(id);
