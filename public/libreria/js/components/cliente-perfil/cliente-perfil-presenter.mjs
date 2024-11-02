@@ -90,7 +90,7 @@ export class ClientePerfilPresenter extends Presenter {
         nombre: this.nombreInput.value,
         apellidos: this.apellidosInput.value,
         direccion: this.direccionInput.value,
-        rol: ROL.ADMIN,
+        rol: ROL.CLIENTE,
         email: this.emailInput.value,
         password: this.passwordInput.value
         
