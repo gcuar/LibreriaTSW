@@ -1,3 +1,5 @@
+import { libreriaSession } from "../commons/libreria-session.mjs";
+
 export const ROL = {
   ADMIN: "ADMIN",
   CLIENTE: "CLIENTE",
@@ -137,6 +139,9 @@ export class Libreria {
   getClientePorId(id) {
     return this.usuarios.find(u => u.rol == ROL.CLIENTE && u._id == id);
   }
+  getAdminPorId(id) {
+    return this.usuarios.find(u => u.rol == ROL.ADMIN && u._id == id);
+  }
 
   getAdministradorPorEmail(email) {
     return this.usuarios.find(u => u.rol == ROL.ADMIN && u.email == email);
@@ -172,6 +177,21 @@ export class Libreria {
 
   getCarroCliente(id) {
     return this.getClientePorId(id).carro;
+  }
+
+  updateAdmin(adminData, adminID) {
+    // Buscar el administrador existente por su ID o email
+    let admin =  this.getAdminPorId(adminID);
+  
+    // Si no se encuentra el administrador, lanzar un error
+    if (!admin) throw new Error('Administrador no encontrado');
+
+    // Actualizar los datos del administrador con los nuevos valores de adminData
+    libreriaSession.setUsuarioId(adminID);
+    Object.assign(admin, adminData);
+  
+    // Retornar el administrador actualizado como confirmación
+    return admin;
   }
 
   /**
