@@ -4,10 +4,9 @@ import { model } from "../../model/model.mjs";
 import { libreriaSession } from "../../commons/libreria-session.mjs";
 import { MensajesPresenter } from "../mensajes/mensajes-presenter.mjs";
 
-export class ClienteCarroPresenter extends Presenter {
+export class ClientePagoPresenter extends Presenter {
   constructor(model, view) {
     super(model, view);
-    // Inicializamos el MensajesPresenter para mostrar mensajes al usuario
     this.mensajesPresenter = new MensajesPresenter(model, 'mensajes', '#mensajesContainer');
   }
 
@@ -27,6 +26,26 @@ export class ClienteCarroPresenter extends Presenter {
   }
 
   // Referencias a elementos del DOM
+  get fechaInput() {
+    return document.querySelector('#fecha');
+  }
+
+  get dniInput() {
+    return document.querySelector('#dni');
+  }
+
+  get razonSocialInput() {
+    return document.querySelector('#razonSocial');
+  }
+
+  get direccionInput() {
+    return document.querySelector('#direccion');
+  }
+
+  get emailInput() {
+    return document.querySelector('#email');
+  }
+
   get carroItemsContainer() {
     return document.querySelector('#carroItems');
   }
@@ -43,19 +62,39 @@ export class ClienteCarroPresenter extends Presenter {
     return document.querySelector('#total');
   }
 
-  // get comprarButton() {
-  //   return document.querySelector('#comprarButton');
-  // }
+  get pagarButton() {
+    return document.querySelector('#pagarButton');
+  }
 
-  get comprarButton() {
-    return document.querySelector('#comprarLink');
+  // Método para inicializar y refrescar la vista
+  async refresh() {
+    // Verificar que el usuario es un cliente autenticado
+    if (!libreriaSession.esCliente()) {
+      this.mensajesPresenter.error('Acceso no autorizado');
+      router.navigate('/libreria/home.html');
+      return;
+    }
+    await super.refresh();
+    await this.mensajesPresenter.refresh();
+
+    // Rellenar los campos con los datos del cliente
+    this.fechaInput.value = new Date().toLocaleDateString();
+    this.dniInput.value = this.cliente.dni;
+    this.razonSocialInput.value = `${this.cliente.nombre} ${this.cliente.apellidos}`;
+    this.direccionInput.value = this.cliente.direccion;
+    this.emailInput.value = this.cliente.email;
+
+    // Renderizar los ítems del carro
+    this.renderCarroItems();
+
+    // Asignar eventos
+    this.assignEventHandlers();
   }
 
   // Método para renderizar los ítems del carro en la tabla
   renderCarroItems() {
-    // Limpiamos el contenido actual del tbody
     this.carroItemsContainer.innerHTML = '';
-    // Iteramos sobre cada ítem en el carro
+
     this.carro.items.forEach((item, index) => {
       const row = document.createElement('tr');
       row.innerHTML = `
@@ -72,11 +111,11 @@ export class ClienteCarroPresenter extends Presenter {
       this.carroItemsContainer.appendChild(row);
     });
 
-    // Actualizamos los totales
+    // Actualizar los totales
     this.actualizarTotales();
 
-    // Asignamos eventos a los elementos dinámicos
-    this.assignEventHandlers();
+    // Asignar eventos a los elementos dinámicos
+    this.assignItemEventHandlers();
   }
 
   // Método para actualizar los totales del carro
@@ -86,19 +125,24 @@ export class ClienteCarroPresenter extends Presenter {
     this.totalElement.textContent = `€ ${this.carro.total.toFixed(2)}`;
   }
 
-  // Método para asignar eventos a los elementos dinámicos
-  assignEventHandlers() {
+  // Método para asignar eventos a los elementos dinámicos del carro
+  assignItemEventHandlers() {
     // Manejar cambios en las cantidades
     const cantidadInputs = document.querySelectorAll('.cantidadInput');
     cantidadInputs.forEach(input => {
       input.addEventListener('change', event => this.actualizarCantidad(event));
     });
+
+    // Manejar eliminación de ítems
     const eliminarButtons = document.querySelectorAll('.eliminarButton');
-  eliminarButtons.forEach(button => {
-    button.addEventListener('click', event => this.eliminarItem(event));
-  });
-    // Asignar evento al botón de comprar
-    this.comprarButton.onclick = event => this.comprarClick(event);
+    eliminarButtons.forEach(button => {
+      button.addEventListener('click', event => this.eliminarItem(event));
+    });
+  }
+
+  // Método para asignar eventos generales
+  assignEventHandlers() {
+    this.pagarButton.onclick = event => this.pagarClick(event);
   }
 
   // Método para actualizar la cantidad de un ítem
@@ -117,17 +161,7 @@ export class ClienteCarroPresenter extends Presenter {
     }
   }
 
-  // Método para manejar el evento de comprar
-  comprarClick(event) {
-    event.preventDefault();
-    try {
-      // Navegar a la página de pago
-      router.navigate('/libreria/cliente-pago.html');
-    } catch (error) {
-      this.mensajesPresenter.error(error.message);
-      this.mensajesPresenter.refresh();
-    }
-  }
+  // Método para eliminar un ítem del carro
   eliminarItem(event) {
     const index = event.target.getAttribute('data-index');
     try {
@@ -138,23 +172,24 @@ export class ClienteCarroPresenter extends Presenter {
       this.mensajesPresenter.refresh();
     }
   }
-  
-  // Método para inicializar y refrescar la vista
-  async refresh() {
-    // Verificar que el usuario es un cliente autenticado
-    if (!libreriaSession.esCliente()) {
-      this.mensajesPresenter.error('Acceso no autorizado');
-      router.navigate('/libreria/home.html');
-      return;
+
+  // Método para manejar el evento de pagar
+  pagarClick(event) {
+    event.preventDefault();
+    try {
+      // Aquí podrías agregar lógica para generar una factura o confirmar la compra
+      // Por simplicidad, vaciaremos el carro y mostraremos un mensaje
+
+      // Vaciar el carro
+      this.cliente.carro.removeItems();
+      this.renderCarroItems();
+
+      // Mostrar mensaje de éxito
+      this.mensajesPresenter.mensaje('¡Compra realizada con éxito!');
+      this.mensajesPresenter.refresh();
+    } catch (error) {
+      this.mensajesPresenter.error(error.message);
+      this.mensajesPresenter.refresh();
     }
-    // Verificar que el carro no está vacío
-    if (this.carro.items.length === 0) {
-      this.mensajesPresenter.error('El carrito está vacío. Agrega productos antes de proceder al pago.');
-      router.navigate('/libreria/cliente-carro.html');
-      return;
-    }
-    await super.refresh();
-    await this.mensajesPresenter.refresh();
-    this.renderCarroItems();
   }
 }
