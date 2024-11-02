@@ -150,7 +150,7 @@ export class ClienteCarroPresenter extends Presenter {
     // Verificar que el carro no está vacío
     if (this.carro.items.length === 0) {
       this.mensajesPresenter.error('El carrito está vacío. Agrega productos antes de proceder al pago.');
-      router.navigate('/libreria/cliente-carro.html');
+      router.navigate('/libreria/cliente-home.html');
       return;
     }
     await super.refresh();
