@@ -177,19 +177,17 @@ export class ClientePagoPresenter extends Presenter {
   pagarClick(event) {
     event.preventDefault();
     try {
-      // Aquí podrías agregar lógica para generar una factura o confirmar la compra
-      // Por simplicidad, vaciaremos el carro y mostraremos un mensaje
-
-      // Vaciar el carro
-      this.cliente.carro.removeItems();
-      this.renderCarroItems();
-
-      // Mostrar mensaje de éxito
-      this.mensajesPresenter.mensaje('¡Compra realizada con éxito!');
-      this.mensajesPresenter.refresh();
+      console.log('this.cliente:', this.cliente);
+  
+      // Llamar a facturarCompraCliente pasando el objeto cliente
+      const factura = model.facturarCompraCliente(this.cliente);
+  
+      // Redirigir a la página de facturas
+      router.navigate('/libreria/cliente-facturas.html');
     } catch (error) {
+      console.error('Error en pagarClick:', error);
       this.mensajesPresenter.error(error.message);
       this.mensajesPresenter.refresh();
     }
-  }
+  }   
 }

@@ -15,6 +15,16 @@ class LibreriaSession {
     });
   }
 
+  setMensajeExito(mensaje) {
+    sessionStorage.setItem('mensajeExito', mensaje);
+  }
+
+  getMensajeExito() {
+    const mensaje = sessionStorage.getItem('mensajeExito');
+    sessionStorage.removeItem('mensajeExito'); // Lo eliminamos después de obtenerlo
+    return mensaje;
+  }
+
   ingreso(usuario) {
     this.setUsuarioId(usuario._id);
     this.setUsuarioRol(usuario.rol);
