@@ -96,6 +96,8 @@ export class ClienteVerLibroPresenter extends Presenter {
       model.addClienteCarroItem(clienteId, item);
       this.mensajesPresenter.mensaje('Libro añadido al carro con éxito.');
       this.mensajesPresenter.refresh();
+      // Redirigir al carrito
+      router.navigate('/libreria/cliente-carro.html');
     } catch (e) {
       console.error(e);
       this.mensajesPresenter.error(e.message);
