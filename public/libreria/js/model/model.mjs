@@ -216,9 +216,22 @@ export class Libreria {
   /**
    * Factura
    */
+  crearFactura(datos) {
+    const factura = new Factura();
+    Object.assign(factura, datos);
+    factura.cliente = datos.cliente; // Asegura que el cliente se asigna correctamente
+    factura.genNumero(); // Genera un número único de factura
+    factura.calcular(); // Asegúrate de que el método calcular está correcto en la clase Factura
+    this.facturas.push(factura);
+    return factura;
+  }
 
   getFacturas() {
     return this.facturas;
+  }
+
+  getFacturasPorClienteId(clienteId) {
+    return this.facturas.filter((f) => f.cliente._id == clienteId);
   }
 
   getFacturaPorId(id) {
@@ -229,26 +242,59 @@ export class Libreria {
     return this.facturas.filter((f) => f.numero == numero);
   }
 
-  facturarCompraCliente(obj) {
-    if (!obj.cliente) throw new Error('Cliente no definido');
-    let cliente = this.getClientePorId(obj.cliente);
-    if (cliente.getCarro().items.length < 1) throw new Error('No hay que comprar');
-    let factura = new Factura();
-    Object.assign(factura, obj)
-    factura.assignId();
-    factura.assignNumero();
-    factura.cliente = new Cliente();
-    Object.assign(factura.cliente, cliente);
-    delete factura.cliente.carro;
-    Object.assign(factura, cliente.carro);
-    cliente.removeItems();
+  facturarCompraCliente(cliente) {
+    try {
+      if (!cliente) {
+        console.error('Cliente no definido en facturarCompraCliente');
+        throw new Error('Cliente no definido');
+      }
+      console.log('Cliente en facturarCompraCliente:', cliente);
+  
+      if (!cliente.carro) {
+        console.error('El cliente no tiene un carro');
+        throw new Error('El cliente no tiene un carro');
+      }
+  
+      if (!cliente.carro.items) {
+        console.error('El carro del cliente no tiene items');
+        throw new Error('El carro del cliente no tiene items');
+      }
+  
+      if (cliente.carro.items.length < 1) {
+        console.error('No hay productos en el carrito');
+        throw new Error('No hay productos en el carrito');
+      }
+  
+      let factura = new Factura();
+      factura.cliente = cliente;
+      factura.items = [...cliente.carro.items];
+      factura.calcular();
+  
+      this.facturas.push(factura);
+  
+      cliente.carro.vaciar();
+  
+      console.log('Factura creada:', factura);
+  
+      return factura;
+    } catch (error) {
+      console.error('Error en facturarCompraCliente:', error);
+      throw error; // Re-lanzar el error para que sea capturado en pagarClick
+    }
   }
+  
+  
 
   removeFactura(id) {
     let factura = this.getFacturaPorId(id);
     if (!factura) throw new Error('Factura no encontrada');
     this.facturas = this.facturas.filter(f => f._id != id);
     return factura;
+  }
+  lastFacturaNumero = 0; // Inicializar lastFacturaNumero
+  genNumeroFactura() {
+    console.log('Nuevo número de factura:', this.lastFacturaNumero);
+    return ++this.lastFacturaNumero;
   }
 }
 
@@ -338,9 +384,19 @@ class Factura extends Identificable {
   iva;
   total;
   cliente;
+  constructor() {
+    super();
+    this.numero = model.genNumeroFactura(); // Genera un número único
+    this.fecha = new Date();
+    this.clienteId = null;
+    this.items = [];
+    this.subtotal = 0;
+    this.iva = 0;
+    this.total = 0;
+  }
 
   genNumero() {
-    this.numero = Libreria.genNumeroFactura();
+    this.numero = model.genNumeroFactura();
   }
 
   addItem(obj) {
@@ -357,9 +413,14 @@ class Factura extends Identificable {
   }
 
   calcular() {
-    this.subtotal = this.items.reduce((total, i) => total + i.total, 0);
-    this.iva = this.total * 0.21;
-    this.total = this.subtotal * this.iva;
+    this.subtotal = 0;
+    // Recorremos los items y sumamos los totales
+    this.items.forEach(item => { if (typeof item.total === 'undefined') {
+        item.calcular(); // Si no tiene total, lo calculamos
+      }
+      this.subtotal += item.total;
+    });
+    this.total = this.subtotal;
   }
 }
 
@@ -377,7 +438,7 @@ class Item {
 }
 
 class Carro {
-  items;
+  items = [];
   subtotal;
   iva;
   total;
@@ -425,6 +486,9 @@ class Carro {
     this.subtotal = this.items.reduce((total, i) => total + i.total, 0);
     this.iva = this.subtotal * 0.21;
     this.total = this.subtotal + this.iva;
+  }
+  vaciar(){
+    this.items = [];
   }
 
 }

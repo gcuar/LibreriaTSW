@@ -36,6 +36,10 @@ export class ClienteHomePresenter extends Presenter {
     // Importante!
     await Promise.all(libros.map(async (l) => { return await new ClienteCatalogoLibroPresenter(l, 'cliente-catalogo-libro', '#catalogo').refresh() }));
     this.salirLink.onclick = event => this.salirClick(event);
+    const mensajeExito = libreriaSession.getMensajeExito();
+    if (mensajeExito) {
+      this.mensajesPresenter.mensaje(mensajeExito);
+      await this.mensajesPresenter.refresh();
+    }
   }
-
 }

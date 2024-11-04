@@ -49,4 +49,4 @@ export function init() {
   router.register(/^\/libreria\/cliente-facturas.html/, new ClienteFacturasPresenter(model, 'cliente-facturas'));
 
   router.handleLocation();
-}
+}router.register(/^\/libreria\/cliente-facturas\.html$/, new ClienteFacturasPresenter(model, 'cliente-facturas'));
