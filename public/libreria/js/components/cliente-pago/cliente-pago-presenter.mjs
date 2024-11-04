@@ -100,16 +100,18 @@ export class ClientePagoPresenter extends Presenter {
       row.innerHTML = `
         <td>${item.libro.titulo}</td>
         <td>
-          <input type="number" min="1" value="${item.cantidad}" data-index="${index}" class="cantidadInput">
+          <input type="number" min="1" value="${item.cantidad}" data-index="${index}" class="cantidadInput" readonly>
         </td>
         <td>€ ${item.libro.precio.toFixed(2)}</td>
         <td>€ ${(item.libro.precio * item.cantidad).toFixed(2)}</td>
-        <td>
-          <button data-index="${index}" class="eliminarButton">Eliminar</button>
-        </td>
+        
       `;
       this.carroItemsContainer.appendChild(row);
     });
+
+    // <td>
+        //   <button data-index="${index}" class="eliminarButton">Eliminar</button>
+        // </td>
 
     // Actualizar los totales
     this.actualizarTotales();
