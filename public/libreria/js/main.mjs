@@ -20,6 +20,7 @@ import { ClienteVerLibroPresenter } from "./components/cliente-ver-libro/cliente
 import { ClientePerfilPresenter } from "./components/cliente-perfil/cliente-perfil-presenter.mjs";
 import { ClientePagoPresenter } from './components/cliente-pago/cliente-pago-presenter.mjs';
 import { ClienteFacturasPresenter } from "./components/cliente-facturas/cliente-facturas-presenter.mjs";
+import { ClienteVerFacturaPresenter } from "./components/cliente-ver-factura/cliente-ver-factura-presenter.mjs";
 
 
 
@@ -32,8 +33,6 @@ export function init() {
   router.register(/^\/libreria\/invitado-ingreso\.html$/, new InvitadoIngresoPresenter(model, 'invitado-ingreso'));
   router.register(/^\/libreria\/invitado-registro\.html$/, new InvitadoRegistroPresenter(model, 'invitado-registro'));
   router.register(/^\/libreria\/invitado-ver-libro.html/, new InvitadoVerLibroPresenter(model, 'invitado-ver-libro'));
-
-
  
   router.register(/^\/libreria\/admin-home.html$/, new AdminHomePresenter(model, 'admin-home'));
   router.register(/^\/libreria\/admin-agregar-libro.html$/, new AdminAgregarLibroPresenter(model, 'admin-agregar-libro'));
@@ -47,6 +46,7 @@ export function init() {
   router.register(/^\/libreria\/cliente-carro\.html$/, new ClienteCarroPresenter(model, 'cliente-carro'));
   router.register(/^\/libreria\/cliente-pago\.html$/, new ClientePagoPresenter(model, 'cliente-pago'));
   router.register(/^\/libreria\/cliente-facturas.html/, new ClienteFacturasPresenter(model, 'cliente-facturas'));
+  router.register(/^\/libreria\/cliente-ver-factura.html/, new ClienteVerFacturaPresenter(model, 'cliente-ver-factura'));
 
   router.handleLocation();
-}router.register(/^\/libreria\/cliente-facturas\.html$/, new ClienteFacturasPresenter(model, 'cliente-facturas'));
+}

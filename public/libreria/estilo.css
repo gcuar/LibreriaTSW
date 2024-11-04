@@ -440,6 +440,7 @@ div.mensajes {
 }
 
 .carro button {
+  padding: 4px;
   width: 80%;
   border: 2px solid chocolate;
   background-color: white;
@@ -533,4 +534,12 @@ div .factura-field>input {
   width: 80%;
   border: 2px solid chocolate;
   background-color: white;
+}
+
+.verButton {
+  padding: 4px;
+  padding-left: 40px;
+  padding-right: 40px;
+  text-decoration: none;
+  border: 2px solid chocolate;
 }
