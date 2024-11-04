@@ -50,9 +50,7 @@ export class ClienteFacturasPresenter extends Presenter {
         <td>${factura.fecha.toLocaleDateString()}</td>
         <td>€ ${factura.total.toFixed(2)}</td>
         <td>
-          <a id="verFactura-${factura.numero}" href='/libreria/cliente-ver-factura.html?id=${factura.numero}' class="verButton">Ver</a>
-          <!-- <button data-numero="${factura.numero}" class="verButton">Ver</button> -->
-
+          <button data-numero="${factura.numero}" class="verButton">Ver</button> 
         </td>
       `;
       this.facturasItemsContainer.appendChild(row);
@@ -74,9 +72,11 @@ export class ClienteFacturasPresenter extends Presenter {
   }
 
   verFactura(event) {
+    event.preventDefault();
     const facturaNumero = event.target.getAttribute('data-numero');
-    // Aquí programaremos la funcionalidad para ver la factura más adelante
 
+    // Aquí programaremos la funcionalidad para ver la factura más adelante
+    router.navigate(`/libreria/cliente-ver-factura.html?numero=${facturaNumero}`);
     //alert(`Ver factura número: ${facturaNumero}`);
   }
 }
