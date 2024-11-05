@@ -44,6 +44,7 @@ export class ClienteFacturasPresenter extends Presenter {
     let totalFacturas = 0;
 
     facturas.forEach(factura => {
+      console.log('Renderizando factura número:', factura.numero);
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${factura.numero}</td>
@@ -74,7 +75,7 @@ export class ClienteFacturasPresenter extends Presenter {
   verFactura(event) {
     event.preventDefault();
     const facturaNumero = event.target.getAttribute('data-numero');
-
+    console.log('Número de factura seleccionado:', facturaNumero);
     // Aquí programaremos la funcionalidad para ver la factura más adelante
     router.navigate(`/libreria/cliente-ver-factura.html?numero=${facturaNumero}`);
     //alert(`Ver factura número: ${facturaNumero}`);

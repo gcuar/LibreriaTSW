@@ -388,6 +388,7 @@ class Administrador extends Usuario {
 }
 
 class Factura extends Identificable {
+  id;
   numero;
   fecha;
   razonSocial;
@@ -401,6 +402,7 @@ class Factura extends Identificable {
   cliente;
   constructor() {
     super();
+    this.assignId(); //Asignar Id único
     this.numero = model.genNumeroFactura(); // Genera un número único
     this.fecha = new Date();
     this.clienteId = null;

@@ -20,7 +20,7 @@ export class ClienteVerFacturaPresenter extends Presenter {
 
   // Acceder al factura desde el modelo
   getFactura() {
-    return model.getFacturaPorId(this.id);
+    return model.getFacturaPorNumero(this.numero);
   }
 
   // Getters y setters para los elementos del DOM
@@ -100,7 +100,9 @@ export class ClienteVerFacturaPresenter extends Presenter {
     this.dni = factura.dni;
     this.email = factura.email;
     this.direccion = factura.direccion;
-    this.cliente = factura.cliente.nombre + ' ' + factura.cliente.apellidos;
+    this.cliente = `${factura.cliente.nombre} ${factura.cliente.apellidos}`;
+    this.iva = factura.iva;
+    this.total = factura.total;
   }
 
   renderFacturaItems(items) {
@@ -117,6 +119,9 @@ export class ClienteVerFacturaPresenter extends Presenter {
       `;
       carroItemsContainer.appendChild(row);
     });
+    // Actualizar IVA y Total
+    document.querySelector('#iva').textContent = `€ ${this.factura.iva.toFixed(2)}`;
+    document.querySelector('#total').textContent = `€ ${this.factura.total.toFixed(2)}`;
   }
 
   async refresh() {
@@ -129,8 +134,9 @@ export class ClienteVerFacturaPresenter extends Presenter {
       router.navigate('/libreria/home.html');
       return;
     }
-
+    console.log('Número de factura desde la URL:', this.numero);
     const factura = this.getFactura();
+    console.log('Factura obtenida:', factura);
     if (factura) {
       this.factura = factura;
       this.renderFacturaItems(factura.items);
