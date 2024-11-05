@@ -180,9 +180,24 @@ export class ClientePagoPresenter extends Presenter {
     event.preventDefault();
     try {
       console.log('this.cliente:', this.cliente);
+      // Capturar los valores de los campos de entrada
+      const razonSocial = this.razonSocialInput.value;
+      const direccion = this.direccionInput.value;
+      const email = this.emailInput.value;
+
+      // Crear un objeto con los datos de facturación
+      const datosFacturacion = {
+        razonSocial,
+        direccion,
+        email,
+        dni: this.dniInput.value, // Aunque está en readonly, lo capturamos
+        fecha: new Date(), // Tomamos la fecha actual
+      };
+
+
   
       // Llamar a facturarCompraCliente pasando el objeto cliente
-      const factura = model.facturarCompraCliente(this.cliente);
+      const factura = model.facturarCompraCliente(this.cliente, datosFacturacion);
   
       // Redirigir a la página de facturas
       router.navigate('/libreria/cliente-facturas.html');
