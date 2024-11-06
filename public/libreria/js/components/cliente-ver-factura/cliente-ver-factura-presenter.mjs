@@ -73,20 +73,37 @@ export class ClienteVerFacturaPresenter extends Presenter {
   }
 
   get clienteText() {
-    return document.querySelector('#emailText');
+    return document.querySelector('#clienteText');
   }
 
   set cliente(cliente) {
     this.clienteText.textContent = cliente;
   }
 
+  get subtotalText(){
+    return document.querySelector('#subtotalText');
+  }
+
+  set subtotal(subtotal) {
+    this.subtotalText.textContent = subtotal;
+  }
+
+  get ivaText(){
+    return document.querySelector('#ivaText');
+  }
+
+  set iva(iva) {
+    this.ivaText.textContent = iva;
+  }
+
+  get totalText(){
+    return document.querySelector('#totalText');
+  }
+
+  set total(total) {
+    this.totalText.textContent = total;
+  }
  
-  // items = [];
-  // subtotal;
-  // iva;
-  // total;
-
-
 
   // Asignar los datos de la factura a los elementos del DOM
   set factura(factura) {
@@ -101,8 +118,10 @@ export class ClienteVerFacturaPresenter extends Presenter {
     this.email = factura.email;
     this.direccion = factura.direccion;
     this.cliente = `${factura.cliente.nombre} ${factura.cliente.apellidos}`;
-    this.iva = factura.iva;
-    this.total = factura.total;
+
+    this.subtotal = `€ ${factura.subtotal.toFixed(2)}`
+    this.iva = `€ ${factura.iva.toFixed(2)}`
+    this.total = `€ ${factura.total.toFixed(2)}`
   }
 
   renderFacturaItems(items) {
@@ -119,9 +138,6 @@ export class ClienteVerFacturaPresenter extends Presenter {
       `;
       carroItemsContainer.appendChild(row);
     });
-    // Actualizar IVA y Total
-    document.querySelector('#iva').textContent = `€ ${this.factura.iva.toFixed(2)}`;
-    document.querySelector('#total').textContent = `€ ${this.factura.total.toFixed(2)}`;
   }
 
   async refresh() {
@@ -141,8 +157,8 @@ export class ClienteVerFacturaPresenter extends Presenter {
       this.factura = factura;
       this.renderFacturaItems(factura.items);
     } else {
-      console.error(`Libro ${this.id} no encontrado`);
-      this.mensajesPresenter.error('Libro no encontrado');
+      console.error(`Factura ${this.id} no encontrada`);
+      this.mensajesPresenter.error('Factura no encontrada');
       this.mensajesPresenter.refresh();
       return;
     }

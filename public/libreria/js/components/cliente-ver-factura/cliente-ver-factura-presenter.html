@@ -41,7 +41,7 @@
           </p>
           <p>
             <label for="dniText">DNI:</label>
-            <div id="dniText"></div>
+            <span id="dniText"></span>
           </p>
           <p>
             <label for="direccionText">Dirección:</label>
@@ -71,12 +71,16 @@
             </tbody>
             <tfoot>
               <tr>
+                <th colspan="3">Subtotal</th>
+                <td colspan="1" id="subtotalText">€ 0.00</td>
+              </tr>
+              <tr>
                 <th colspan="3">IVA (21%)</th>
-                <td colspan="1" id="iva">€ 0.00</td>
+                <td colspan="1" id="ivaText">€ 0.00</td>
               </tr>
               <tr>
                 <th colspan="3">Total</th>
-                <td colspan="1" id="total">€ 0.00</td>
+                <td colspan="1" id="totalText">€ 0.00</td>
               </tr>
             </tfoot>
           </table>
