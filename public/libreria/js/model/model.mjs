@@ -235,14 +235,14 @@ export class Libreria {
   }
 
   getFacturaPorId(id) {
-    return this.facturas.filter((f) => f._id == id);
+    return this.facturas.find((f) => f._id == id);
   }
 
   getFacturaPorNumero(numero) {
-    return this.facturas.filter((f) => f.numero == numero);
+    return this.facturas.find((f) => f.numero == numero);
   }
 
-  facturarCompraCliente(cliente) {
+  facturarCompraCliente(cliente, datosFacturacion) {
     try {
       if (!cliente) {
         console.error('Cliente no definido en facturarCompraCliente');
@@ -267,9 +267,24 @@ export class Libreria {
   
       let factura = new Factura();
       factura.cliente = cliente;
-      factura.items = [...cliente.carro.items];
+      factura.items = cliente.carro.items.map(item => {
+        // Crear una copia de cada item
+        let newItem = new Item();
+        newItem.cantidad = item.cantidad;
+        newItem.libro = item.libro; 
+        newItem.calcular();
+        return newItem;
+      });
+      
+      // Asignar las propiedades faltantes de la factura
+      factura.razonSocial = datosFacturacion.razonSocial;
+      factura.dni = datosFacturacion.dni;
+      factura.direccion = datosFacturacion.direccion;
+      factura.email = datosFacturacion.email;
+      factura.fecha = datosFacturacion.fecha;
+      //Calcular el total
       factura.calcular();
-  
+      
       this.facturas.push(factura);
   
       cliente.carro.vaciar();
@@ -373,6 +388,7 @@ class Administrador extends Usuario {
 }
 
 class Factura extends Identificable {
+  id;
   numero;
   fecha;
   razonSocial;
@@ -386,6 +402,7 @@ class Factura extends Identificable {
   cliente;
   constructor() {
     super();
+    this.assignId(); //Asignar Id único
     this.numero = model.genNumeroFactura(); // Genera un número único
     this.fecha = new Date();
     this.clienteId = null;
@@ -415,12 +432,14 @@ class Factura extends Identificable {
   calcular() {
     this.subtotal = 0;
     // Recorremos los items y sumamos los totales
-    this.items.forEach(item => { if (typeof item.total === 'undefined') {
+    this.items.forEach(item => {
+      if (typeof item.total === 'undefined') {
         item.calcular(); // Si no tiene total, lo calculamos
       }
       this.subtotal += item.total;
     });
-    this.total = this.subtotal;
+    this.iva = this.subtotal * 0.21; // Calcular IVA (21%)
+    this.total = this.subtotal + this.iva; // Actualizar el total incluyendo el IVA
   }
 }
 

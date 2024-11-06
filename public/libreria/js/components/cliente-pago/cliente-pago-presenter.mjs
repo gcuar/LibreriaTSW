@@ -100,16 +100,18 @@ export class ClientePagoPresenter extends Presenter {
       row.innerHTML = `
         <td>${item.libro.titulo}</td>
         <td>
-          <input type="number" min="1" value="${item.cantidad}" data-index="${index}" class="cantidadInput">
+          <input type="number" min="1" value="${item.cantidad}" data-index="${index}" class="cantidadInput" readonly>
         </td>
         <td>€ ${item.libro.precio.toFixed(2)}</td>
         <td>€ ${(item.libro.precio * item.cantidad).toFixed(2)}</td>
-        <td>
-          <button data-index="${index}" class="eliminarButton">Eliminar</button>
-        </td>
+        
       `;
       this.carroItemsContainer.appendChild(row);
     });
+
+    // <td>
+        //   <button data-index="${index}" class="eliminarButton">Eliminar</button>
+        // </td>
 
     // Actualizar los totales
     this.actualizarTotales();
@@ -178,9 +180,24 @@ export class ClientePagoPresenter extends Presenter {
     event.preventDefault();
     try {
       console.log('this.cliente:', this.cliente);
+      // Capturar los valores de los campos de entrada
+      const razonSocial = this.razonSocialInput.value;
+      const direccion = this.direccionInput.value;
+      const email = this.emailInput.value;
+
+      // Crear un objeto con los datos de facturación
+      const datosFacturacion = {
+        razonSocial,
+        direccion,
+        email,
+        dni: this.dniInput.value, // Aunque está en readonly, lo capturamos
+        fecha: new Date(), // Tomamos la fecha actual
+      };
+
+
   
       // Llamar a facturarCompraCliente pasando el objeto cliente
-      const factura = model.facturarCompraCliente(this.cliente);
+      const factura = model.facturarCompraCliente(this.cliente, datosFacturacion);
   
       // Redirigir a la página de facturas
       router.navigate('/libreria/cliente-facturas.html');

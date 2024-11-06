@@ -44,13 +44,14 @@ export class ClienteFacturasPresenter extends Presenter {
     let totalFacturas = 0;
 
     facturas.forEach(factura => {
+      console.log('Renderizando factura número:', factura.numero);
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${factura.numero}</td>
         <td>${factura.fecha.toLocaleDateString()}</td>
         <td>€ ${factura.total.toFixed(2)}</td>
         <td>
-          <button data-numero="${factura.numero}" class="verButton">Ver</button>
+          <button data-numero="${factura.numero}" class="verButton">Ver</button> 
         </td>
       `;
       this.facturasItemsContainer.appendChild(row);
@@ -72,8 +73,11 @@ export class ClienteFacturasPresenter extends Presenter {
   }
 
   verFactura(event) {
+    event.preventDefault();
     const facturaNumero = event.target.getAttribute('data-numero');
+    console.log('Número de factura seleccionado:', facturaNumero);
     // Aquí programaremos la funcionalidad para ver la factura más adelante
-    alert(`Ver factura número: ${facturaNumero}`);
+    router.navigate(`/libreria/cliente-ver-factura.html?numero=${facturaNumero}`);
+    //alert(`Ver factura número: ${facturaNumero}`);
   }
 }
