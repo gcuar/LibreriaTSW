@@ -160,8 +160,8 @@ export class Libreria {
 
   addClienteCarroItem(clienteId, item) {
     let cliente = this.getClientePorId(clienteId);
-    console.log("Cliente en addClienteCarroItem:", cliente);
-    console.log("Item en addClienteCarroItem:", item);
+    // console.log("Cliente en addClienteCarroItem:", cliente);
+    // console.log("Item en addClienteCarroItem:", item);
     if (!cliente) throw new Error('Cliente no encontrado');
     let libro = this.getLibroPorId(item.libro);
     
@@ -169,7 +169,7 @@ export class Libreria {
     item.libro = libro;
     cliente.addCarroItem(item);
 
-    console.log("Carro del cliente después de addClienteCarroItem:", cliente);
+    // console.log("Carro del cliente después de addClienteCarroItem:", cliente);
   }
 
   getAdminPorId(id) {

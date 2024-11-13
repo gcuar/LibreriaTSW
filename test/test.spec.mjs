@@ -2,7 +2,7 @@ import puppeteer from 'puppeteer';
 import { expect } from 'chai';
 import { assert } from 'chai';
 import mocha from 'mocha';
-import { model } from './model.mjs';
+import { model, Libreria } from './model.mjs';
 
 describe('Libreria App', function() {
     let browser;
@@ -20,6 +20,13 @@ describe('Libreria App', function() {
         await browser.close();
     });
 
+    beforeEach(() => {
+        // Reiniciar el estado del modelo antes de cada test
+        model.libros = [];
+        model.usuarios = [];
+        model.facturas = [];
+        Libreria.lastId = 0;
+    });   
 
     //Test de ejemplo
     it('should have the correct page title', async () => {
@@ -139,31 +146,164 @@ describe('Libreria App', function() {
         assert.equal(cliente.password, 'pepe321');
     }); 
 
-    // it('CLIENTE: Debería asignar y devolver el carro de un cliente (no sé hacerla)', () => {
-    //     const cliente = model.addCliente({ _id: 1000, dni: '12345678Z', nombre: 'Pepe', apellidos: 'Pérez', direccion: 'Calle Falsa 123', rol: 'CLIENTE', email: 'pepe7@perez.es', password: 'pepe123', carro: { items: [] }});
-    //     const Libro = model.addLibro({_id: 1000, isbn: "978-84-670-1350-8", titulo: "El Quijote", autores: 'Cervantes', portada: 'https://es.wikipedia.org/wiki/Don_Quijote_de_la_Mancha', resumen: 'Las aventuras de Don Quijote y Sancho Panza por La Mancha', stock: 10, precio: 70 });
-    //     const item = { cantidad: 2, libro: Libro, total: 140 };
+    it('CLIENTE: Debería asignar y devolver el carro de un cliente', () => {
+        const cliente = model.addCliente({
+            _id: 1000,
+            dni: '12345678Z',
+            nombre: 'Pepe',
+            apellidos: 'Pérez',
+            direccion: 'Calle Falsa 123',
+            rol: 'CLIENTE',
+            email: 'pepe7@perez.es',
+            password: 'pepe123'
+            // Eliminamos 'carro' de aquí
+        });
+        const libro = model.addLibro({
+            _id: 1000,
+            isbn: "978-84-670-1350-8",
+            titulo: "El Quijote",
+            autores: 'Cervantes',
+            portada: 'https://es.wikipedia.org/wiki/Don_Quijote_de_la_Mancha',
+            resumen: 'Las aventuras de Don Quijote y Sancho Panza por La Mancha',
+            stock: 10,
+            precio: 70
+        });
+        const item = { cantidad: 2, libro: libro._id, total: 140 };
         
-    //     model.addClienteCarroItem(cliente._id, item);
-    //     assert.equal(cliente.carro.items.length, 1);
-    //     assert.equal(cliente.carro.items[0].libro.isbn, '978-84-670-1350-8');
-    // });
-
-
-
- 
-
+        model.addClienteCarroItem(cliente._id, item);
+        assert.equal(cliente.carro.items.length, 1);
+        assert.equal(cliente.carro.items[0].libro.isbn, '978-84-670-1350-8');
+    });
     
+
         
     // TESTS: EXCEPCIONES
+    
+    //Agregar Libro sin ISBN
+    it('EXCEPCIÓN: Debería lanzar un error al intentar agregar un libro sin ISBN', () => {
+        expect(() => model.addLibro({ titulo: 'Libro Sin ISBN' })).to.throw('El libro no tiene ISBN');
+    });
+    
+    //Agregar Libro con ISBN duplicado
+    it('EXCEPCIÓN: Debería lanzar un error al agregar un libro con ISBN duplicado', () => {
+        const libroData = { isbn: '978-84-670-1350-0', titulo: 'Libro Duplicado', autores: 'Autor', stock: '5', precio: '25' };
+        model.addLibro(libroData);
+        expect(() => model.addLibro(libroData)).to.throw(Error, `El ISBN ${libroData.isbn} ya existe`);
+    });
+    
 
+    //Eliminar libro que no existe
+    it('EXCEPCIÓN: Debería lanzar un error al intentar eliminar un libro que no existe', () => {
+        expect(() => model.removeLibro(9999)).to.throw('Libro no encontrado');
+    });
+
+    //Modificar libro que no existe
+    it('EXCEPCIÓN: Debería lanzar un error al intentar modificar un libro que no existe', () => {
+        expect(() => model.updateLibro({ _id: 9999, titulo: 'Libro Inexistente' })).to.throw('No se encontró un libro con el ID: 9999');
+    });
+        
     // TESTS: AGREGAR, MODIFICAR Y ELIMINAR
-   
+    
+    //Agregar Libro correctamente
+    it('AGREGAR: Debería agregar un libro correctamente', () => {
+        const libroData = { isbn: '978-84-670-1350-7', titulo: 'Nuevo Libro', autores: 'Nuevo Autor', stock: '15', precio: '50' };
+        const libro = model.addLibro(libroData);
+        assert.equal(libro.titulo, 'Nuevo Libro');
+        assert.equal(libro.isbn, '978-84-670-1350-7');
+    });
+
+    //Agregar Cliente correctamente
+    it('AGREGAR: Debería agregar un cliente correctamente', () => {
+        const clienteData = { dni: '98765432X', nombre: 'Juan', apellidos: 'García', direccion: 'Calle Nueva 1', rol: 'CLIENTE', email: 'juan@garcia.es', password: 'juan123' };
+        const cliente = model.addCliente(clienteData);
+        assert.equal(cliente.nombre, 'Juan');
+        assert.equal(cliente.email, 'juan@garcia.es');
+    });
+    
+    //Modificar un libro correctamente
+    it('MODIFICAR: Debería modificar un libro existente', () => {
+        const libroData = { isbn: '978-84-670-1350-8', titulo: 'Libro Original', autores: 'Autor Original', stock: '20', precio: '60' };
+        const libro = model.addLibro(libroData);
+        
+        const updatedData = { _id: libro._id, titulo: 'Libro Modificado', autores: 'Autor Modificado' };
+        const libroModificado = model.updateLibro(updatedData);
+        
+        assert.equal(libroModificado.titulo, 'Libro Modificado');
+        assert.equal(libroModificado.autores, 'Autor Modificado');
+    });
+
+    //Modificar un cliente correctamente
+    it('MODIFICAR: Debería modificar un cliente existente', () => {
+        const clienteData = { dni: '87654321X', nombre: 'María', apellidos: 'López', direccion: 'Avenida Siempre Viva 742', rol: 'CLIENTE', email: 'maria@lopez.es', password: 'maria123' };
+        const cliente = model.addCliente(clienteData);
+      
+        const updatedData = { _id: cliente._id, direccion: 'Avenida Siempre Viva 743' };
+        const clienteModificado = model.updateUsuario(updatedData);
+      
+        assert.equal(clienteModificado.direccion, 'Avenida Siempre Viva 743');
+    });
+    
+    //Eliminar un libro correctamente
+    it('ELIMINAR: Debería eliminar un libro existente', () => {
+        const libroData = { isbn: '978-84-670-1350-9', titulo: 'Libro a Eliminar', autores: 'Autor', stock: '10', precio: '40' };
+        const libro = model.addLibro(libroData);
+      
+        const libroEliminado = model.removeLibro(libro._id);
+        assert.equal(libroEliminado.isbn, '978-84-670-1350-9');
+      
+        const libroBuscado = model.getLibroPorId(libro._id);
+        assert.isUndefined(libroBuscado);
+    });
 
     // TESTS: CÁLCULOS
-
-
-
-
-   
+    
+    //Calculo de subtotal, IVA y total en carrito
+    it('CÁLCULO: Debería calcular correctamente el subtotal, IVA y total en el carrito', () => {
+        const clienteData = { dni: '12345678Y', nombre: 'Carlos', apellidos: 'Martínez', direccion: 'Calle Mayor 10', rol: 'CLIENTE', email: 'carlos@martinez.es', password: 'carlos123' };
+        const cliente = model.addCliente(clienteData);
+      
+        const libro1 = model.addLibro({ isbn: '978-84-670-1351-0', titulo: 'Libro 1', autores: 'Autor 1', stock: '10', precio: '30' });
+        const libro2 = model.addLibro({ isbn: '978-84-670-1351-1', titulo: 'Libro 2', autores: 'Autor 2', stock: '5', precio: '50' });
+      
+        model.addClienteCarroItem(cliente._id, { libro: libro1._id, cantidad: 2 });
+        model.addClienteCarroItem(cliente._id, { libro: libro2._id, cantidad: 1 });
+      
+        const carro = cliente.getCarro();
+      
+        const expectedSubtotal = (2 * 30) + (1 * 50); // 110
+        const expectedIva = expectedSubtotal * 0.21; // 23.1
+        const expectedTotal = expectedSubtotal + expectedIva; // 133.1
+      
+        assert.equal(carro.subtotal, expectedSubtotal);
+        assert.closeTo(carro.iva, expectedIva, 0.01);
+        assert.closeTo(carro.total, expectedTotal, 0.01);
+    });
+    
+    //Calculo en factura al facturar una compra
+    it('CÁLCULO: Debería calcular correctamente el total en la factura al facturar una compra', () => {
+        const clienteData = { dni: '56789012Z', nombre: 'Laura', apellidos: 'Gómez', direccion: 'Calle Luna 15', rol: 'CLIENTE', email: 'laura@gomez.es', password: 'laura123' };
+        const cliente = model.addCliente(clienteData);
+      
+        const libro = model.addLibro({ isbn: '978-84-670-1351-2', titulo: 'Libro Factura', autores: 'Autor Factura', stock: '8', precio: '80' });
+      
+        model.addClienteCarroItem(cliente._id, { libro: libro._id, cantidad: 1 });
+      
+        const datosFacturacion = {
+          razonSocial: 'Laura Gómez',
+          dni: '56789012Z',
+          direccion: 'Calle Luna 15',
+          email: 'laura@gomez.es',
+          fecha: new Date()
+        };
+      
+        const factura = model.facturarCompraCliente(cliente, datosFacturacion);
+      
+        const expectedSubtotal = 1 * 80; // 80
+        const expectedIva = expectedSubtotal * 0.21; // 16.8
+        const expectedTotal = expectedSubtotal + expectedIva; // 96.8
+      
+        assert.equal(factura.subtotal, expectedSubtotal);
+        assert.closeTo(factura.iva, expectedIva, 0.01);
+        assert.closeTo(factura.total, expectedTotal, 0.01);
+    });         
 });
