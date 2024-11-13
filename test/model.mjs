@@ -160,11 +160,16 @@ export class Libreria {
 
   addClienteCarroItem(clienteId, item) {
     let cliente = this.getClientePorId(clienteId);
+    console.log("Cliente en addClienteCarroItem:", cliente);
+    console.log("Item en addClienteCarroItem:", item);
     if (!cliente) throw new Error('Cliente no encontrado');
     let libro = this.getLibroPorId(item.libro);
+    
     if (!libro) throw new Error('Libro no encontrado');
     item.libro = libro;
     cliente.addCarroItem(item);
+
+    console.log("Carro del cliente después de addClienteCarroItem:", cliente);
   }
 
   getAdminPorId(id) {
@@ -334,7 +339,7 @@ class Libro extends Identificable {
   }
 
   incPrecioP(porcentaje) {
-    this.precio = this.precio * (1 + porcentaje / 100);
+    this.precio = this.precio * (1 + (porcentaje / 100));
   }
 
   dexPrecioP(porcentaje) {
