@@ -23,7 +23,7 @@ export class AdminAgregarLibroPresenter extends Presenter {
   }
 
   get tituloAreaText() {
-    return this.tituloArea.textContent;
+    return this.tituloArea.value;
   }
 
   get autoresArea() {
@@ -31,7 +31,7 @@ export class AdminAgregarLibroPresenter extends Presenter {
   }
 
   get autoresAreaText() {
-    return this.autoresArea.textContent;
+    return this.autoresArea.value;
   }
 
   get resumenArea() {
@@ -39,7 +39,7 @@ export class AdminAgregarLibroPresenter extends Presenter {
   }
 
   get resumenAreaText() {
-    return this.resumenArea.textContent;
+    return this.resumenArea.value;
   }
 
   get stockInput() {
