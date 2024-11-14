@@ -175,6 +175,33 @@ describe('Libreria App', function() {
         assert.equal(cliente.carro.items[0].libro.isbn, '978-84-670-1350-8');
     });
     
+    it('ADMIN: Debería asignar y devolver el nombre, apellidos, DNI, dirección, rol, email y contraseña de un admin', () => {
+        const admin = model.addAdmin({ dni: '111222333Z', nombre: 'Juan', apellidos: 'Pérez', direccion: 'Calle Falsa 666', rol: 'ADMIN', email: 'juan@perez.es', password: 'juan666'});
+        assert.equal(admin.nombre, 'Juan');
+        assert.equal(admin.apellidos, 'Pérez');
+        assert.equal(admin.dni, '111222333Z');
+        assert.equal(admin.direccion, 'Calle Falsa 666');
+        assert.equal(admin.rol, 'ADMIN');
+        assert.equal(admin.email, 'juan@perez.es');
+        assert.equal(admin.password, 'juan666');
+
+        admin.nombre = 'Juanito';
+        admin.apellidos = 'Pérez Pérez';
+        admin.dni = '333222111Z';
+        admin.direccion = 'Calle Falsa 667';
+        admin.rol = 'CLIENTE';
+        admin.email = 'juanele@perez.es';
+        admin.password = 'juan667';
+
+        assert.equal(admin.nombre, 'Juanito');
+        assert.equal(admin.apellidos, 'Pérez Pérez');
+        assert.equal(admin.dni, '333222111Z');
+        assert.equal(admin.direccion, 'Calle Falsa 667');
+        assert.equal(admin.rol, 'CLIENTE');
+        assert.equal(admin.email, 'juanele@perez.es');
+        assert.equal(admin.password, 'juan667');
+
+    });
 
         
     // TESTS: EXCEPCIONES
