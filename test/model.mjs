@@ -253,7 +253,7 @@ export class Libreria {
         console.error('Cliente no definido en facturarCompraCliente');
         throw new Error('Cliente no definido');
       }
-      console.log('Cliente en facturarCompraCliente:', cliente);
+      //console.log('Cliente en facturarCompraCliente:', cliente);
   
       if (!cliente.carro) {
         console.error('El cliente no tiene un carro');
@@ -294,7 +294,7 @@ export class Libreria {
   
       cliente.carro.vaciar();
   
-      console.log('Factura creada:', factura);
+      // console.log('Factura creada:', factura);
   
       return factura;
     } catch (error) {
@@ -313,7 +313,7 @@ export class Libreria {
   }
   lastFacturaNumero = 0; // Inicializar lastFacturaNumero
   genNumeroFactura() {
-    console.log('Nuevo número de factura:', this.lastFacturaNumero);
+    // console.log('Nuevo número de factura:', this.lastFacturaNumero);
     return ++this.lastFacturaNumero;
   }
 }
