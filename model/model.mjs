@@ -1,4 +1,3 @@
-import { libreriaSession } from "../commons/libreria-session.mjs";
 
 export const ROL = {
   ADMIN: "ADMIN",
