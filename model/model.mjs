@@ -1,4 +1,3 @@
-import { libreriaSession } from "../public/libreria/js/commons/libreria-session.mjs";
 
 export const ROL = {
   ADMIN: "ADMIN",
@@ -160,16 +159,11 @@ export class Libreria {
 
   addClienteCarroItem(clienteId, item) {
     let cliente = this.getClientePorId(clienteId);
-    // console.log("Cliente en addClienteCarroItem:", cliente);
-    // console.log("Item en addClienteCarroItem:", item);
     if (!cliente) throw new Error('Cliente no encontrado');
     let libro = this.getLibroPorId(item.libro);
-    
     if (!libro) throw new Error('Libro no encontrado');
     item.libro = libro;
     cliente.addCarroItem(item);
-
-    // console.log("Carro del cliente después de addClienteCarroItem:", cliente);
   }
 
   getAdminPorId(id) {
@@ -253,7 +247,7 @@ export class Libreria {
         console.error('Cliente no definido en facturarCompraCliente');
         throw new Error('Cliente no definido');
       }
-      //console.log('Cliente en facturarCompraCliente:', cliente);
+      console.log('Cliente en facturarCompraCliente:', cliente);
   
       if (!cliente.carro) {
         console.error('El cliente no tiene un carro');
@@ -294,7 +288,7 @@ export class Libreria {
   
       cliente.carro.vaciar();
   
-      // console.log('Factura creada:', factura);
+      console.log('Factura creada:', factura);
   
       return factura;
     } catch (error) {
@@ -313,7 +307,7 @@ export class Libreria {
   }
   lastFacturaNumero = 0; // Inicializar lastFacturaNumero
   genNumeroFactura() {
-    // console.log('Nuevo número de factura:', this.lastFacturaNumero);
+    console.log('Nuevo número de factura:', this.lastFacturaNumero);
     return ++this.lastFacturaNumero;
   }
 }
@@ -339,7 +333,7 @@ class Libro extends Identificable {
   }
 
   incPrecioP(porcentaje) {
-    this.precio = this.precio * (1 + (porcentaje / 100));
+    this.precio = this.precio * (1 + porcentaje / 100);
   }
 
   dexPrecioP(porcentaje) {

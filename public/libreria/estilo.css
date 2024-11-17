@@ -1,6 +1,7 @@
 /* Colores
-#6f4626, #f9801a, #e0d12b, #f5f08a, #7dbe7c 
+DarkSlateBlue, #f9801a, #e0d12b, #f5f08a, LightSkyBlue 
 */
+
 
 html {
   height: 100%;
@@ -115,8 +116,8 @@ nav.navbar ul li {
   padding: 0.5em;
   /* margin-left: .5em;
   margin-right: .5em; */
-  border-right: 0.5em solid chocolate;
-  border-left: 0.5em solid chocolate;
+  border-right: 0.5em solid slateblue;
+  border-left: 0.5em solid slateblue;
 }
 
 nav.navbar ul a {
@@ -126,8 +127,8 @@ nav.navbar ul a {
 
 nav.navbar ul li:hover {
   /* background-color: lightgray; */
-  border-right: 0.5em solid #6f4626;
-  border-left: 0.5em solid #6f4626;
+  border-right: 0.5em solid DarkSlateBlue;
+  border-left: 0.5em solid DarkSlateBlue;
   margin-left: 0;
   margin-right: 0;
 }
@@ -155,7 +156,7 @@ nav.toolbar ul li {
   width: 100px;
   text-align: center;
   /* margin-bottom: .5em; */
-  border-bottom: 0.5em solid chocolate;
+  border-bottom: 0.5em solid slateblue;
   margin-left: .5em;
 }
 
@@ -165,7 +166,7 @@ nav.toolbar ul a {
 }
 
 nav.toolbar ul li:hover {
-  border-bottom: 0.5em solid #6f4626;
+  border-bottom: 0.5em solid DarkSlateBlue;
   margin-bottom: 0;
 }
 
@@ -196,8 +197,8 @@ form>footer>input[type=submit] {
   border: none;
   padding: .5em;
   color: black;
-  border-right: solid 1em chocolate;
-  border-left: solid 1em chocolate;
+  border-right: solid 1em slateblue;
+  border-left: solid 1em slateblue;
   text-decoration: none;
   cursor: pointer;
   background-color: transparent;
@@ -205,8 +206,8 @@ form>footer>input[type=submit] {
 }
 
 form>footer>input[type=submit]:hover {
-  border-right: solid 1em #6f4626;
-  border-left: solid 1em #6f4626;
+  border-right: solid 1em DarkSlateBlue;
+  border-left: solid 1em DarkSlateBlue;
 }
 
 form textarea,
@@ -218,18 +219,18 @@ form input[type=date] {
   padding: 8px 12px;
   margin: 4px 0;
   border-radius: 4px;
-  border: 1px SOLID chocolate;
+  border: 1px SOLID slateblue;
 }
 
 form select {
   padding: 8px 12px;
   margin: 4px 0;
   border-radius: 4px;
-  border: 1px SOLID chocolate;
+  border: 1px SOLID slateblue;
 }
 
 form label {
-  color: #6f4626;
+  color: DarkSlateBlue;
   font-weight: bold;
 }
 
@@ -301,13 +302,13 @@ div.mensajes {
 
 .libro {
   font-family: Georgia, 'Times New Roman', Times, serif;
-  border: SOLID 1px #6f4626;
+  border: SOLID 1px DarkSlateBlue;
   width: 200px;
 }
 
 .libro p.titulo {
   font-weight: bold;
-  background-color: #6f4626;
+  background-color: DarkSlateBlue;
   color: white;
   padding: 1em;
   margin: 0;
@@ -315,7 +316,7 @@ div.mensajes {
 
 .libro p.autores {
   font-style: italic;
-  background-color: #7dbe7c;
+  background-color: LightSkyBlue;
   padding: 0.5em 1em;
   margin: 0;
   word-wrap: break-word;
@@ -435,14 +436,14 @@ div.mensajes {
   padding: 8px 12px;
   margin: 4px 0;
   border-radius: 4px;
-  border: 1px SOLID chocolate;
+  border: 1px SOLID slateblue;
   width: 3em;
 }
 
 .carro button {
   padding: 4px;
   width: 80%;
-  border: 2px solid chocolate;
+  border: 2px solid slateblue;
   background-color: white;
 }
 
@@ -495,19 +496,19 @@ div .factura-field>input {
 }
 
 .listFactura tfoot {
-  border-top: 4px solid chocolate;
+  border-top: 4px solid slateblue;
   /* border-bottom: 1px solid black; */
 }
 
 .listFactura thead {
   border-top: 2px solid white;
-  border-bottom: 1px solid chocolate;
+  border-bottom: 1px solid slateblue;
 }
 
 .listFactura th,
 .listFactura td {
   vertical-align: center;
-  border-top: dashed chocolate 1px;
+  border-top: dashed slateblue 1px;
   padding: 5px;
   text-align: center;
   width: 20%;
@@ -532,7 +533,7 @@ div .factura-field>input {
 
 .listFactura button {
   width: 80%;
-  border: 2px solid chocolate;
+  border: 2px solid slateblue;
   background-color: white;
 }
 
@@ -541,5 +542,5 @@ div .factura-field>input {
   padding-left: 40px;
   padding-right: 40px;
   text-decoration: none;
-  border: 2px solid chocolate;
+  border: 2px solid slateblue;
 }
