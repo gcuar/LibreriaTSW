@@ -97,6 +97,14 @@ export class Libreria {
     this.usuarios.push(cliente);
     return cliente;
   }
+  
+  removeCliente(id){
+    let cliente= this.getClientePorId(id);
+    if(!cliente) throw new Error(!'Cliente no encontrado');
+    if(cliente.rol !== ROL.CLIENTE) throw new Error('El usuario no es cliente');
+    this.usuarios = this.usuarios.filter(u=> u._id != id);
+    return cliente
+  }
 
   addAdmin(obj) {
     let admin = new Administrador();
