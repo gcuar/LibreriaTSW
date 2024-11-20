@@ -146,6 +146,17 @@ app.post('/api/admins/autenticar', function (req, res, next) {
     }
   });
   
+  app.get('/api/clientes', function (req, res) {
+    console.log('/api/clientes');
+    try {
+      const clientes = model.getClientes(); // Llama al método para obtener los clientes
+      res.json(clientes); // Envía la lista de clientes como respuesta en formato JSON
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Error al obtener los clientes' }); // Manejo de errores
+    }
+  });
+  
 app.post('/api/clientes', function (req, res, next) {
   console.log('/api/clientes')
   try {
@@ -156,6 +167,18 @@ app.post('/api/clientes', function (req, res, next) {
     res.status(401).json({ message: err.message })
   }
 })
+
+app.delete('/api/clientes/:id', function (req, res) {
+  console.log('/api/clientes/:id');
+  try {
+    const id = req.params.id; // Obtener el ID desde los parámetros de la URL
+    const clienteEliminado = model.removeCliente(id); // Llamar a la función para eliminar el cliente
+    res.json({ message: 'Cliente eliminado con éxito', cliente: clienteEliminado });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ message: err.message }); // Manejar errores y enviar una respuesta adecuada
+  }
+});
 
 app.use('/', express.static(path.join(STATIC_DIR, 'public')));
 
