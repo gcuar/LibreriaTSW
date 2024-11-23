@@ -106,6 +106,14 @@ export class Libreria {
     return cliente
   }
 
+  removeAdmin(id){
+    let admin= this.getAdminPorId(id);
+    if(!admin) throw new Error(!'Admin no encontrado');
+    if(admin.rol !== ROL.ADMIN) throw new Error('El usuario no es admin');
+    this.usuarios = this.usuarios.filter(u=> u._id != id);
+    return admin
+  }
+
   addAdmin(obj) {
     let admin = new Administrador();
     Object.assign(admin, obj)
