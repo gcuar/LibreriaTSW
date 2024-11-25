@@ -140,16 +140,96 @@ app.put('/api/admins/:id', function (req, res, next) {
   let id = req.params.id;
   if (!id) res.status(500).json({ error: 'ID no definido' });
   else {
+    try{
     let admin = model.getAdminPorId(id);
     if (!admin) res.status(404).json({ error: 'Admin no encontrado' });
     else {
-      admin = Object.assign(admin, req.body);
+      //admin = Object.assign(admin, req.body);
       model.updateAdmin(admin);
       res.json(model.getAdminPorId(id));
+    }
+  }catch (err){
+    res.status(500).json({ error: err.message });
+  }
+  }
+});
+
+
+app.delete('/api/admins', function (req, res) {
+  console.log('DELETE /api/admins');
+
+  try {
+    const adminsEliminados = model.removeAdmins(); // Llama al método removeAdmins del modelo
+
+    res.status(200).json({
+      message: 'Todos los administradores han sido eliminados',
+      admins: adminsEliminados, // Lista de administradores eliminados
+    });
+  } catch (err) {
+    console.error('Error al eliminar administradores:', err.message);
+
+    res.status(500).json({
+      message: 'Error al eliminar administradores',
+      error: err.message,
+    });
+  }
+});
+
+// Obtener un admin por ID
+app.get('/api/admins/:id', function (req, res, next) {
+  let id = req.params.id;
+  if (!id) {
+    res.status(400).json({ error: 'ID no definido' });
+  } else {
+    try {
+      let admin = model.getAdminPorId(id);
+      if (!admin) {
+        res.status(404).json({ error: 'Admin no encontrado' });
+      } else {
+        res.json(admin);
+      }
+    } catch (err) {
+      res.status(500).json({ error: err.message });
     }
   }
 });
 
+// Obtener un admin por email
+app.get('/api/admins?email=email', function (req, res, next) {
+  const email = req.query.email;
+  if (!email) {
+    return res.status(400).json({ error: 'Email no definido' });
+  } else {
+    try {
+      const adminPorEmail = model.getAdminPorEmail(email);  // Aquí obtenemos el admin por su email
+      if (!adminPorEmail) {
+        return res.status(404).json({ error: 'Admin con Email no encontrado' });
+      } else {
+        return res.json(adminPorEmail);  // Retornamos el admin encontrado
+      }
+    } catch (err) {
+      return res.status(500).json({ error: 'Error al obtener el admin por email', details: err.message });
+    }
+  }
+});
+//por dni
+app.get('/api/admins?dni=dni', function (req, res, next) {
+  const dni = req.query.dni;
+  if (!dni) {
+    return res.status(400).json({ error: 'DNI no definido' });
+  } else {
+    try {
+      const adminPorDni = model.getAdminPorDni(dni);  // Aquí obtenemos el admin por su dni
+      if (!adminPorDni) {
+        return res.status(404).json({ error: 'Admin con DNI no encontrado' });
+      } else {
+        return res.json(adminPorDni);  // Retornamos el admin encontrado
+      }
+    } catch (err) {
+      return res.status(500).json({ error: 'Error al obtener el admin por DNI', details: err.message });
+    }
+  }
+});
 // autenticar(obj) - admins
 app.post('/api/admins/autenticar', function (req, res, next) {
   try {
@@ -163,8 +243,6 @@ app.post('/api/admins/autenticar', function (req, res, next) {
 
     res.status(200).json({ message: 'Autenticación exitosa', admin });
   } catch (err) {
-    // console.error('Error en autenticación:', err.message); // Log detallado del error
-    
     if (err.message === 'Rol no encontrado') {
       res.status(400).json({ error: 'Rol no válido' });
     } else if (err.message === 'Usuario no encontrado') {
@@ -203,6 +281,17 @@ app.post('/api/admins/autenticar', function (req, res, next) {
       }
     }
   });
+  app.delete('/api/libros', function(req, res, next) {
+    try {
+      // Llamamos al método removeLibros del modelo para eliminar todos los libros
+      const librosEliminados = model.removeLibros();
+      
+      // Respondemos con los libros eliminados
+      res.json({ message: 'Todos los libros han sido eliminados', libros: librosEliminados });
+    } catch (err) {
+      res.status(500).json({ error: err.message });  // Si ocurre un error, respondemos con el mensaje de error
+    }
+  });
   
   app.get('/api/clientes', function (req, res) {
     console.log('/api/clientes');
@@ -212,6 +301,14 @@ app.post('/api/admins/autenticar', function (req, res, next) {
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Error al obtener los clientes' }); // Manejo de errores
+    }
+  });
+  app.put('/api/clientes', function (req, res, next) {
+    let clientes = req.body;
+    try {
+      res.json(model.addCliente(clientes));
+    } catch (err) {
+      res.status(500).json({ error: err.message });
     }
   });
   
@@ -235,6 +332,58 @@ app.delete('/api/clientes/:id', function (req, res) {
   } catch (err) {
     console.error(err);
     res.status(400).json({ message: err.message }); // Manejar errores y enviar una respuesta adecuada
+  }
+});
+
+app.delete('/api/clientes', function (req, res) {
+  console.log('DELETE /api/clientes');
+
+  try {
+    const clientesEliminados = model.removeClientes(); // Llama al método removeAdmins del modelo
+
+    res.status(200).json({
+      message: 'Todos los clientes han sido eliminados',
+      clientes: clientesEliminados, // Lista de clientes eliminados
+    });
+  } catch (err) {
+    console.error('Error al eliminar clientes:', err.message);
+
+    res.status(500).json({
+      message: 'Error al eliminar clientes',
+      error: err.message,
+    });
+  }
+});
+
+app.get('/api/clientes/:id', function (req, res, next) {
+  let id = req.params.id;
+  if (!id) {
+    res.status(400).json({ error: 'ID no definido' });
+  } else {
+    try {
+      let cliente = model.getClientePorId(id);
+      if (!cliente) {
+        res.status(404).json({ error: 'Cliente no encontrado' });
+      } else {
+        res.json(cliente);
+      }
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+});
+
+app.put('/api/clientes/:id', function (req, res, next) {
+  let id = req.params.id;
+  if (!id) res.status(500).json({ error: 'ID no definido' });
+  else {
+    let cliente = model.getClientePorId(id);
+    if (!cliente) res.status(404).json({ error: 'Cliente no encontrado' });
+    else {
+      cliente = Object.assign(cliente, req.body);
+      model.updateCliente(cliente);
+      res.json(model.getClientePorId(id));
+    }
   }
 });
 

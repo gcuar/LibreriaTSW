@@ -66,6 +66,16 @@ export class Libreria {
     else this.libros = this.libros.filter(l => l._id != id);
     return libro;
   }
+  removeLibros() {
+    // Guardamos los libros actuales para devolverlos si es necesario
+    const librosEliminados = this.libros;
+    
+    // Limpiamos el array de libros
+    this.libros = [];
+    
+    // Devolvemos los libros eliminados
+    return librosEliminados;
+  }
 
   updateLibro(obj) {
     let libro = this.getLibroPorId(obj._id);
@@ -105,6 +115,16 @@ export class Libreria {
     this.usuarios = this.usuarios.filter(u=> u._id != id);
     return cliente
   }
+  removeClientes() {
+    const clientes = this.usuarios.filter(u => u.rol === ROL.CLIENTE); // Filtrar todos los clientes
+    if (clientes.length === 0) {
+      throw new Error('No hay clientes para eliminar');
+    }
+  
+    this.usuarios = this.usuarios.filter(u => u.rol !== ROL.CLIENTE); // Remover los clientes de la lista de usuarios
+  
+    return clientes; // Retornar los clientes eliminados
+  }
 
   removeAdmin(id){
     let admin= this.getAdminPorId(id);
@@ -112,6 +132,17 @@ export class Libreria {
     if(admin.rol !== ROL.ADMIN) throw new Error('El usuario no es admin');
     this.usuarios = this.usuarios.filter(u=> u._id != id);
     return admin
+  }
+
+  removeAdmins() {
+    const admins = this.usuarios.filter(u => u.rol === ROL.ADMIN); // Filtrar todos los admins
+    if (admins.length === 0) {
+      throw new Error('No hay administradores para eliminar');
+    }
+  
+    this.usuarios = this.usuarios.filter(u => u.rol !== ROL.ADMIN); // Remover los admins de la lista de usuarios
+  
+    return admins; // Retornar los administradores eliminados
   }
 
   addAdmin(obj) {
