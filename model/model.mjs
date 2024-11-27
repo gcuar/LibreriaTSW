@@ -31,6 +31,13 @@ export class Libreria {
     return this.libros;
   }
 
+  setLibros(array) {
+    let libros = this.getLibros();
+    libros.forEach((l) => { this.removeLibro(l._id) })
+    array.forEach((l) => { this.addLibro(l) })
+    return this.libros;
+  }
+
   addLibro(obj) {
     if (!obj.isbn) throw new Error('El libro no tiene ISBN');
     if (this.getLibroPorIsbn(obj.isbn)) throw new Error(`El ISBN ${obj.isbn} ya existe`)
