@@ -15,7 +15,7 @@ const ISBNS = ['978-3-16-148410-0', '978-3-16-148410-1', '978-3-16-148410-2', '9
 describe("REST libreria", function () {
     describe("libros", function () {
 
-        
+      // Test para el metodo PUT [setLibros(array)]
       it(`PUT ${URL}/libros`, async () => {
         let requester = chai.request.execute(app).keepOpen();
   
@@ -58,7 +58,7 @@ describe("REST libreria", function () {
         requester.close();
       });
   
-  
+      // Test para el metodo GET [getLibros()]
       it(`GET ${URL}/libros`, async () => {
         let requester = chai.request.execute(app).keepOpen();
   
@@ -93,7 +93,96 @@ describe("REST libreria", function () {
         requester.close();
       });
   
+      // Test para el metodo DELETE [removeLibros()]
+
+
+
+      it(`DELETE ${URL}/libros`, async () => {
+        let requester = chai.request.execute(app).keepOpen();
+
+        let request = requester.get(`/api/libros`);
+        let response = await request.send();
+        assert.equal(response.status, 200);
+        assert.isTrue(response.ok);
+        let libros = response.body;
+        assert.equal(0, libros.length);
+
+        // console.log("Al iniciar debe ser 0:", libros.length);
+
+        let libros_esperados = ISBNS.map(isbn => crearLibro(isbn));
+        request = requester.put(`/api/libros`);
+        await request.send(libros_esperados);
+
+        request = requester.get(`/api/libros`);
+        response = await request.send();
+        assert.equal(response.status, 200);
+        assert.isTrue(response.ok);
+        libros = response.body;
+        assert.equal(libros_esperados.length, libros.length);
+
+        // console.log("Despues de añadir los libros debe ser 5:", libros.length);
+
+        request = requester.delete(`/api/libros`);
+        response = await request.send();
+        assert.equal(response.status, 200);
+        assert.isTrue(response.ok);
+
+        request = requester.get(`/api/libros`);
+        response = await request.send();
+        assert.equal(response.status, 200);
+        assert.isTrue(response.ok);
+        libros = response.body;
+        assert.equal(0, libros.length);
+
+        // console.log("Despues de borrar los libros debe ser 0:", libros.length);
+
+        requester.close();
+
+      });
+
+
+      // Test para el metodo POST [addLibro(obj)]
+
+      it(`POST ${URL}/libros`, async () => {
+        let requester = chai.request.execute(app).keepOpen();
   
+        let request = requester.get(`/api/libros`);
+        let response = await request.send();
+        assert.equal(response.status, 200);
+        assert.isTrue(response.ok);
+        let libros = response.body;
+        assert.equal(0, libros.length);
+  
+        let libros_esperados = ISBNS.map(isbn => crearLibro(isbn));
+        request = requester.put(`/api/libros`);
+        await request.send(libros_esperados);
+  
+        let nuevo_libro = crearLibro('978-3-16-148410-5');
+        request = requester.post(`/api/libros`);
+        response = await request.send(nuevo_libro);
+
+        assert.equal(response.status, 200);
+        assert.isTrue(response.ok);
+        let actual = response.body;
+        assert.equal(nuevo_libro.isbn, actual.isbn, "El isbn no coincide");
+        assert.equal(nuevo_libro.titulo, actual.titulo, "El titulo no coincide");
+        assert.equal(nuevo_libro.resumen, actual.resumen, "El resumen no coincide");
+        assert.equal(nuevo_libro.autores, actual.autores, "Los autores no coinciden");
+        assert.equal(nuevo_libro.portada, actual.portada, "La portada no coincide");
+        assert.equal(nuevo_libro.stock, actual.stock, "El stock no coincide");
+        assert.equal(nuevo_libro.precio, actual.precio, "El precio no coincide");
+        assert.isDefined(actual._id, "El _id no esta definido");
+
+        // console.log("El libro añadido es:", actual);
+        // console.log("El libro esperado es:", nuevo_libro);
+
+
+        requester.close();
+      });
+
+
+
+      // Test para el metodo GET [getLibroPorId(id)]
       it(`GET ${URL}/libros/:id`, async () => {
         // comentar seed
         let requester = chai.request.execute(app).keepOpen();
