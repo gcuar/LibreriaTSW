@@ -15,6 +15,9 @@ const ISBNS = ['978-3-16-148410-0', '978-3-16-148410-1', '978-3-16-148410-2', '9
 describe("REST libreria", function () {
     describe("libros", function () {
 
+
+      // TEST DE LIBROS
+
       // Test para el metodo PUT [setLibros(array)]
       it(`PUT ${URL}/libros`, async () => {
         let requester = chai.request.execute(app).keepOpen();
@@ -94,9 +97,6 @@ describe("REST libreria", function () {
       });
   
       // Test para el metodo DELETE [removeLibros()]
-
-
-
       it(`DELETE ${URL}/libros`, async () => {
         let requester = chai.request.execute(app).keepOpen();
 
@@ -137,12 +137,10 @@ describe("REST libreria", function () {
         // console.log("Despues de borrar los libros debe ser 0:", libros.length);
 
         requester.close();
-
       });
 
 
       // Test para el metodo POST [addLibro(obj)]
-
       it(`POST ${URL}/libros`, async () => {
         let requester = chai.request.execute(app).keepOpen();
   
@@ -179,7 +177,6 @@ describe("REST libreria", function () {
 
         requester.close();
       });
-
 
 
       // Test para el metodo GET [getLibroPorId(id)]
@@ -220,5 +217,99 @@ describe("REST libreria", function () {
         await Promise.all(responses);
         requester.close();
       });
+
+      // Test para el metodo GET [getLibroPorIsbn(isbn) Ruta: /api/libros?isbn=isbn]
+          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA 
+
+      // Test para el metodo GET [getLibroPorTitulo(titulo) Ruta: /api/libros?titulo=titulo]
+          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA
+
+
+      // Test para el metodo DELETE [removeLibro(id) Ruta: /api/libros/:id]
+      it(`DELETE ${URL}/libros/:id`, async () => {
+        let requester = chai.request.execute(app).keepOpen();
+    
+        // Obtener la lista inicial de libros
+        let request = requester.get(`/api/libros`);
+        let response = await request.send();
+        assert.equal(response.status, 200);
+
+        assert.isTrue(response.ok);
+        let libros = response.body;
+        assert.equal(0, libros.length);
+    
+        // Agregar libros esperados
+        let libros_esperados = ISBNS.map(isbn => crearLibro(isbn));
+        request = requester.put(`/api/libros`);
+        await request.send(libros_esperados);
+
+        // Verificar que los libros fueron agregados
+        request = requester.get(`/api/libros`);
+        response = await request.send();
+
+        assert.equal(response.status, 200);
+
+        assert.isTrue(response.ok);
+        libros = response.body;
+        assert.equal(libros_esperados.length, libros.length);
+    
+        // Eliminar un libro específico
+        // console.log (libros[0]);
+        const idToDelete = libros[0]._id;
+        // console.log ("El id a eliminar es:", idToDelete);
+        request = requester.delete(`/api/libros/${idToDelete}`);
+        response = await request.send();
+
+        assert.equal(response.status, 200);
+
+        assert.isTrue(response.ok);
+    
+        // Obtener la lista de libros después de la eliminación
+        request = requester.get(`/api/libros`);
+        response = await request.send();
+
+        assert.equal(response.status, 200);
+
+        assert.isTrue(response.ok);
+        libros = response.body;
+    
+        // Verificar que el libro específico fue eliminado
+        assert.equal(libros_esperados.length - 1, libros.length);
+        let libroEliminado = libros.find(libro => libro._id === idToDelete);
+        assert.isUndefined(libroEliminado, "El libro no fue eliminado");
+
+        // Verificar que los demás libros siguen presentes
+        libros_esperados.slice(1).forEach(esperado => {
+            let actual = libros.find(libro => libro.isbn === esperado.isbn);
+            assert.isDefined(actual, `El libro con ISBN ${esperado.isbn} no está presente`);
+            assert.equal(esperado.isbn, actual.isbn, "El ISBN no coincide");
+            assert.equal(esperado.titulo, actual.titulo, "El título no coincide");
+            assert.equal(esperado.resumen, actual.resumen, "El resumen no coincide");
+            assert.equal(esperado.autores, actual.autores, "Los autores no coinciden");
+            assert.equal(esperado.portada, actual.portada, "La portada no coincide");
+            assert.equal(esperado.stock, actual.stock, "El stock no coincide");
+            assert.equal(esperado.precio, actual.precio, "El precio no coincide");
+        });
+    
+        requester.close();
+      });
+
+
+      // Test para el metodo PUT [updateLibro(id) Ruta: /api/libros/:id]
+
+
+
+
+
+      
+      // TEST DE CLIENTES
+
+
+      // TEST DE ADMINISTRADORES
+
+
+      // TEST DE FACTURAS (no funciona nada halp)
+
+
     });
   });
