@@ -13,10 +13,7 @@ import { crearLibro } from "../model/seeder.mjs";
 const ISBNS = ['978-3-16-148410-0', '978-3-16-148410-1', '978-3-16-148410-2', '978-3-16-148410-3', '978-3-16-148410-4'];
 
 describe("REST libreria", function () {
-    describe("libros", function () {
-
-
-      // TEST DE LIBROS
+    describe("Pruebas de libros", function () {
 
       // Test para el metodo PUT [setLibros(array)]
       it(`PUT ${URL}/libros`, async () => {
@@ -139,7 +136,6 @@ describe("REST libreria", function () {
         requester.close();
       });
 
-
       // Test para el metodo POST [addLibro(obj)]
       it(`POST ${URL}/libros`, async () => {
         let requester = chai.request.execute(app).keepOpen();
@@ -177,7 +173,6 @@ describe("REST libreria", function () {
 
         requester.close();
       });
-
 
       // Test para el metodo GET [getLibroPorId(id)]
       it(`GET ${URL}/libros/:id`, async () => {
@@ -223,7 +218,6 @@ describe("REST libreria", function () {
 
       // Test para el metodo GET [getLibroPorTitulo(titulo) Ruta: /api/libros?titulo=titulo]
           // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA
-
 
       // Test para el metodo DELETE [removeLibro(id) Ruta: /api/libros/:id]
       it(`DELETE ${URL}/libros/:id`, async () => {
@@ -294,22 +288,88 @@ describe("REST libreria", function () {
         requester.close();
       });
 
-
       // Test para el metodo PUT [updateLibro(id) Ruta: /api/libros/:id]
+      it (`PUT ${URL}/libros/:id`, async () => {
+        let requester = chai.request.execute(app).keepOpen();
+    
+        // Obtener la lista inicial de libros
+        let request = requester.get(`/api/libros`);
+        let response = await request.send();
+        assert.equal(response.status, 200);
 
+        assert.isTrue(response.ok);
+        let libros = response.body;
+        assert.equal(0, libros.length);
+    
+        // Agregar libros esperados
+        let libros_esperados = ISBNS.map(isbn => crearLibro(isbn));
+        request = requester.put(`/api/libros`);
+        await request.send(libros_esperados);
 
+        // Verificar que los libros fueron agregados
+        request = requester.get(`/api/libros`);
+        response = await request.send();
 
+        assert.equal(response.status, 200);
 
+        assert.isTrue(response.ok);
+        libros = response.body;
+        assert.equal(libros_esperados.length, libros.length);
+    
+        // Modificar un libro específico
+        const idToUpdate = libros[0]._id;
+        const libroAntes = libros[0];
+        const libroModificado = {
+            isbn: "978-3-16-148410-0",
+            titulo: "Nuevo título",
+            resumen: "Nuevo resumen",
+            autores: "Nuevo autor",
+            portada: "Nueva portada",
+            stock: 10,
+            precio: 100
+        };
+        request = requester.put(`/api/libros/${idToUpdate}`);
+        response = await request.send(libroModificado);
 
-      
-      // TEST DE CLIENTES
+        assert.equal(response.status, 200);
 
+        assert.isTrue(response.ok);
 
-      // TEST DE ADMINISTRADORES
+        // Obtener el libro modificado
+        request = requester.get(`/api/libros/${idToUpdate}`);
+        response = await request.send();
 
+        assert.equal(response.status, 200);
 
-      // TEST DE FACTURAS (no funciona nada halp)
+        assert.isTrue(response.ok);
+        let actual = response.body;
 
+        // console.log(libroAntes.isbn, libroModificado.isbn, actual.isbn);
+        // console.log(libroAntes.titulo, libroModificado.titulo, actual.titulo);
+        // console.log(libroAntes.resumen, libroModificado.resumen, actual.resumen);
+        // console.log(libroAntes.autores, libroModificado.autores, actual.autores);
+        // console.log(libroAntes.portada, libroModificado.portada, actual.portada);
+        // console.log(libroAntes.stock, libroModificado.stock, actual.stock); 
+        // console.log(libroAntes.precio, libroModificado.precio, actual.precio);
+
+        assert.equal(libroModificado.isbn, actual.isbn, "El ISBN no coincide");
+        assert.equal(libroModificado.titulo, actual.titulo, "El título no coincide");
+        assert.equal(libroModificado.resumen, actual.resumen, "El resumen no coincide");
+        assert.equal(libroModificado.autores, actual.autores, "Los autores no coinciden");
+        assert.equal(libroModificado.portada, actual.portada, "La portada no coincide");
+        assert.equal(libroModificado.stock, actual.stock, "El stock no coincide");
+        assert.equal(libroModificado.precio, actual.precio, "El precio no coincide");
+        assert.equal(idToUpdate, actual._id, "El _id no coincide");
+
+        requester.close();
+      });
 
     });
+
+    describe("Pruebas de clientes", function () {});
+
+    describe("Pruebas de administradores", function () {});
+
+    describe("Pruebas de facturas", function () {});
+
   });
