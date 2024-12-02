@@ -33,7 +33,7 @@ export function crearCliente(dni) {
   return cliente;
 }
 
-function crearAdmin(dni) {
+export function crearAdmin(dni) {
   let admin = crearPersona(dni);
   admin.rol = ROL.ADMIN;
   return admin;

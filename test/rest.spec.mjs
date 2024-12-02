@@ -10,7 +10,11 @@ const URL = '/api';
 
 // Export crear libro
 import { crearLibro } from "../model/seeder.mjs";
+import { crearCliente } from "../model/seeder.mjs";
+import { crearAdmin } from "../model/seeder.mjs";
 const ISBNS = ['978-3-16-148410-0', '978-3-16-148410-1', '978-3-16-148410-2', '978-3-16-148410-3', '978-3-16-148410-4'];
+const C_DNIS = ['00000000C', '00000001C', '00000002C', '00000003C', '00000004C'];
+const A_DNIS = ['00000000A', '00000001A', '00000002A', '00000003A', '00000004A', '00000000C'];
 
 describe("REST libreria", function () {
     describe("Pruebas de libros", function () {
@@ -366,7 +370,194 @@ describe("REST libreria", function () {
 
     });
 
-    describe("Pruebas de clientes", function () {});
+    describe("Pruebas de clientes", function () {
+
+      // Test para el metodo PUT [setClientes(array)]
+      // it(`PUT ${URL}/clientes`, async () => {
+      //   let requester = chai.request.execute(app).keepOpen();
+  
+      //   let request = requester.get(`/api/clientes`);
+      //   let response = await request.send();
+      //   assert.equal(response.status, 200);
+      //   assert.isTrue(response.ok);
+      //   let clientes = response.body;
+
+      //   // console.log(clientes);
+
+      //   assert.equal(1, clientes.length);
+  
+      //   let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
+      //   clientes_esperados.forEach((c, i) => c._id = i + 1);
+  
+      //   request = requester.put(`/api/clientes`);
+      //   response = await request.send(clientes_esperados);
+
+      //   console.log("hola", response.statusMessage);
+      //   console.log("hola", response.statusCode);
+
+      //   assert.equal(response.status, 200);
+      //   assert.isTrue(response.ok);
+
+      //   console.log(clientes.length);
+      //   clientes = response.body;
+      //   console.log(clientes.length);
+      //   console.log(clientes_esperados.length);
+      //   assert.equal(clientes_esperados.length, clientes.length);
+
+
+      //   clientes_esperados.forEach(esperado => {
+      //     let actual = clientes.find(c => c.dni == esperado.dni);
+      //     assert.equal(esperado.dni, actual.dni, "El dni no coincide");
+      //     assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
+      //     assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
+      //     assert.equal(esperado.direccion, actual.direccion, "La direccion no coincide");
+      //     assert.equal(esperado.email, actual.email, "El email no coincide");
+      //     assert.equal(esperado.password, actual.password, "La password no coincide");
+      //     assert.equal(esperado._id, actual._id, "El _id no coincide");
+      //   });
+      //   requester.close();
+      // }); 
+
+      it(`PUT ${URL}/clientes`, async () => {
+        let requester = chai.request.execute(app).keepOpen();
+    
+        // Primera solicitud GET para obtener clientes
+        let request = requester.get(`/api/clientes`);
+        let response = await request.send();
+        assert.equal(response.status, 200);
+        assert.isTrue(response.ok);
+        let clientes = response.body;
+    
+        // Verificar que hay un cliente inicialmente
+        assert.equal(0, clientes.length);
+    
+        // Crear clientes esperados
+        let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
+        clientes_esperados.forEach((c, i) => c._id = i + 1);
+    
+        // Depuración: Verificar los datos que se enviarán en la solicitud PUT
+        // console.log("Clientes esperados:", clientes_esperados)
+    
+        // Solicitud PUT para actualizar clientes
+        request = requester.put(`/api/clientes`);
+        response = await request.send(clientes_esperados);
+    
+        // Depuración: Verificar la respuesta del servidor
+        // console.log("Respuesta del servidor:", response.statusMessage);
+        // console.log("Código de estado:", response.statusCode);
+    
+        // Verificar que la solicitud PUT fue exitosa
+        assert.equal(response.status, 200);
+        assert.isTrue(response.ok);
+    
+        // Depuración: Verificar la longitud de clientes antes y después de la reasignación
+        // console.log("Longitud de clientes antes de reasignar:", clientes.length);
+        clientes = response.body;
+        // console.log("Longitud de clientes después de reasignar:", clientes.length);
+        // console.log("Longitud de clientes esperados:", clientes_esperados.length);
+    
+        // Asegúrate de que la longitud de clientes sea la esperada
+        assert.equal(clientes_esperados.length, clientes.length);
+    
+        // Verificar que todos los clientes esperados coincidan con los reales
+        clientes_esperados.forEach(esperado => {
+          let actual = clientes.find(c => c.dni == esperado.dni);
+          assert.equal(esperado.dni, actual.dni, "El dni no coincide");
+          assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
+          assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
+          assert.equal(esperado.direccion, actual.direccion, "La direccion no coincide");
+          assert.equal(esperado.email, actual.email, "El email no coincide");
+          assert.equal(esperado.password, actual.password, "La password no coincide");
+          assert.equal(esperado._id, actual._id, "El _id no coincide");
+        });
+    
+        requester.close();
+      });
+    
+      // beforeEach(async function () {
+      //   let requester = chai.request.execute(app).keepOpen();
+      //   let request = requester.put(`/api/clientes`);
+      //   let response = await request.send([]);
+      //   assert.equal(response.status, 200);
+      //   assert.isTrue(response.ok);
+      //   requester.close();
+      // });
+
+      // Test para el metodo GET [getClientes()]
+      it(`GET ${URL}/clientes`, async () => {
+        let requester = chai.request.execute(app).keepOpen();
+  
+        let request = requester.get(`/api/clientes`);
+        let response = await request.send();
+        assert.equal(response.status, 200);
+        assert.isTrue(response.ok);
+        let clientes = response.body;
+        assert.equal(0, clientes.length);
+  
+        let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
+        request = requester.put(`/api/clientes`);
+        await request.send(clientes_esperados);
+  
+        request = requester.get(`/api/clientes`);
+        response = await request.send();
+        assert.equal(response.status, 200);
+        assert.isTrue(response.ok);
+        clientes = response.body;
+        assert.equal(clientes_esperados.length, clientes.length);
+        clientes_esperados.forEach(esperado => {
+          let actual = clientes.find(c => c.dni == esperado.dni);
+          assert.equal(esperado.dni, actual.dni, "El dni no coincide");
+          assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
+          assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
+          assert.equal(esperado.direccion, actual.direccion, "La direccion no coincide");
+          assert.equal(esperado.email, actual.email, "El email no coincide");
+          assert.equal(esperado.password, actual.password, "La password no coincide");
+          assert.equal(esperado._id, actual._id, "El _id no coincide");
+        });
+        requester.close();
+      });
+
+      // Test para el metodo DELETE [removeClientes()]
+      it(`DELETE ${URL}/clientes`, async () => {
+      });
+
+      // Test para el metodo POST [addCliente(obj)]
+      it(`POST ${URL}/clientes`, async () => {
+      });
+
+      // Test para el metodo GET [getClientePorId(id)]
+      it(`GET ${URL}/clientes/:id`, async () => {
+      }); 
+
+      // Test para el metodo GET [getClientePorEmail(email) Ruta: /api/clientes?email=email]
+          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA 
+
+      // Test para el metodo GET [getClientePorDni(dni) Ruta: /api/clientes?dni=dni]
+          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA
+
+      // Test para el metodo DELETE [removeCliente(id) Ruta: /api/clientes/:id]
+      it(`DELETE ${URL}/clientes/:id`, async () => {
+      });
+
+      // Test para el metodo PUT [updateCliente(id) Ruta: /api/clientes/:id]
+          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA 
+
+      // Test para el metodo POST [autenticar(obj) Ruta: /api/clientes/autenticar y /api/clientes/singin]
+          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA 
+
+      // Test para el metodo GET [getCarroCliente(id) Ruta: /api/clientes/:id/carro]
+          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA
+
+      // Test para el metodo POST [addCarroClienteItem(id, item) Ruta: /api/clientes/:id/carro/items]
+          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA
+
+      // Test para el metodo PUT setClienteCarroItemCantidad(id, index, cantidad) Ruta: /api/clientes/:id/carro/items/:index
+          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA
+
+
+
+
+    });
 
     describe("Pruebas de administradores", function () {});
 
