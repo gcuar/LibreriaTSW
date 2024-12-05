@@ -163,8 +163,21 @@ export class Libreria {
     return this.usuarios.filter((u) => u.rol == ROL.CLIENTE);
   }
 
+  setClientes(array) {
+    let clientes = this.getClientes();
+    clientes.forEach((c) => { this.removeCliente(c._id) });
+    array.forEach((c) => { this.addCliente(c) });
+    return this.usuarios;
+  }
+
   getAdmins() {
     return this.usuarios.filter((u) => u.rol == ROL.ADMIN);
+  }
+  setAdmins(array) {
+    let admins = this.getAdmins();
+    admins.forEach((a) => { this.removeAdmin(a._id) });
+    array.forEach((a) => { this.addAdmin(a) });
+    return this.usuarios;
   }
 
   getUsuarioPorId(_id) {

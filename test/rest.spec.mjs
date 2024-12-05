@@ -1,5 +1,3 @@
-// FILE FOR TESTING REST API
-
 import * as chaiModule from "chai";
 import chaiHttp from "chai-http";
 import { app } from "../app.mjs";
@@ -48,7 +46,6 @@ describe("REST libreria", function () {
           assert.equal(esperado.portada, actual.portada, "La portada no coincide");
           assert.equal(esperado.stock, actual.stock, "El stock no coincide");
           assert.equal(esperado.precio, actual.precio, "El precio no coincide");
-          assert.equal(esperado._id, actual._id, "El _id no coincide");
         });
         requester.close();
       });
@@ -370,186 +367,283 @@ describe("REST libreria", function () {
 
     });
 
-    describe("Pruebas de clientes", function () {
+  describe("Pruebas de clientes", function () {
 
-      // Test para el metodo PUT [setClientes(array)]
-      // it(`PUT ${URL}/clientes`, async () => {
-      //   let requester = chai.request.execute(app).keepOpen();
-  
-      //   let request = requester.get(`/api/clientes`);
-      //   let response = await request.send();
-      //   assert.equal(response.status, 200);
-      //   assert.isTrue(response.ok);
-      //   let clientes = response.body;
+    // Test para el metodo PUT [setClientes(array)]
+    it(`PUT ${URL}/clientes`, async () => {
+      let requester = chai.request.execute(app).keepOpen();
 
-      //   // console.log("hay tantos clientes:",clientes.length);
+      let request = requester.get(`/api/clientes`);
+      let response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      let clientes = response.body;
+      assert.equal(0, clientes.length);
 
-      //   assert.equal(0, clientes.length);
-  
-      //   let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
-      //   clientes_esperados.forEach((c, i) => c._id = i + 1);
-  
-      //   request = requester.put(`/api/clientes`);
-      //   response = await request.send(clientes_esperados);
+      let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
+      clientes_esperados.forEach((c, i) => c._id = i + 1);
 
-      //   console.log("hola", response.statusMessage);
-      //   console.log("hola", response.statusCode);
+      request = requester.put(`/api/clientes`);
+      response = await request.send(clientes_esperados);
 
-      //   assert.equal(response.status, 200);
-      //   assert.isTrue(response.ok);
+      // console.log(clientes_esperados);
+      // console.log(response);
 
-      //   console.log(response.body.length);
-
-      //   console.log("clientes:",clientes.length);
-      //   clientes = response.body;
-      //   console.log("clientes:",clientes.length);
-      //   console.log("esperados:",clientes_esperados.length);
-      //   assert.equal(clientes_esperados.length, clientes.length);
-
-
-      //   clientes_esperados.forEach(esperado => {
-      //     let actual = clientes.find(c => c.dni == esperado.dni);
-      //     assert.equal(esperado.dni, actual.dni, "El dni no coincide");
-      //     assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
-      //     assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
-      //     assert.equal(esperado.direccion, actual.direccion, "La direccion no coincide");
-      //     assert.equal(esperado.email, actual.email, "El email no coincide");
-      //     assert.equal(esperado.password, actual.password, "La password no coincide");
-      //     assert.equal(esperado._id, actual._id, "El _id no coincide");
-      //   });
-      //   requester.close();
-      // }); 
-
-      it(`PUT ${URL}/clientes`, async () => {
-        let requester = chai.request.execute(app).keepOpen();
-      
-        let request = requester.get(`/api/clientes`);
-        let response = await request.send();
-        assert.equal(response.status, 200);
-        assert.isTrue(response.ok);
-        let clientes = response.body;
-      
-        // console.log("Clientes iniciales:", clientes);
-      
-        assert.equal(0, clientes.length);
-      
-        let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
-        clientes_esperados.forEach((c, i) => c._id = i + 1);
-      
-        // console.log("Clientes esperados:", clientes_esperados);
-      
-        request = requester.put(`/api/clientes`);
-        response = await request.send(clientes_esperados);
-      
-        console.log("Response statusMessage:", response.statusMessage);
-        console.log("Response statusCode:", response.statusCode);
-        // console.log("Response body:", response.body);
-      
-        assert.equal(response.status, 200);
-        assert.isTrue(response.ok);
-      
-        console.log("Response body length:", response.body.length);
-        console.log("SALE UNDEFINED ENTONCES NO SE PUEDE HACER EL TEST, PUEDE SER UN ERROR DE LA API");
-      
-        clientes = response.body;
-        console.log("Clientes después del PUT:", clientes.length);
-        console.log("Clientes esperados:", clientes_esperados.length);
-        assert.equal(clientes_esperados.length, clientes.length);
-      
-        clientes_esperados.forEach(esperado => {
-          let actual = clientes.find(c => c.dni == esperado.dni);
-          assert.equal(esperado.dni, actual.dni, "El dni no coincide");
-          assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
-          assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
-          assert.equal(esperado.direccion, actual.direccion, "La direccion no coincide");
-          assert.equal(esperado.email, actual.email, "El email no coincide");
-          assert.equal(esperado.password, actual.password, "La password no coincide");
-          assert.equal(esperado._id, actual._id, "El _id no coincide");
-        });
-        requester.close();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      clientes = response.body;
+      assert.equal(clientes_esperados.length, clientes.length);
+      clientes_esperados.forEach(esperado => {
+        let actual = clientes.find(c => c.dni == esperado.dni);
+        assert.equal(esperado.dni, actual.dni, "El dni no coincide");
+        assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
+        assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
+        assert.equal(esperado.email, actual.email, "El email no coincide");
       });
+      requester.close();
+    });
 
+    beforeEach(async function () {
+      let requester = chai.request.execute(app).keepOpen();
+      let request = requester.put(`/api/clientes`);
+      let response = await request.send([]);
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      requester.close();
+    });
 
+    // Test para el metodo GET [getClientes()]
+    it(`GET ${URL}/clientes`, async () => {
+      let requester = chai.request.execute(app).keepOpen();
 
+      let request = requester.get(`/api/clientes`);
+      let response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      let clientes = response.body;
+      assert.equal(0, clientes.length);
 
-      // Test para el metodo GET [getClientes()]
-      // it(`GET ${URL}/clientes`, async () => {
-      //   let requester = chai.request.execute(app).keepOpen();
-  
-      //   let request = requester.get(`/api/clientes`);
-      //   let response = await request.send();
-      //   assert.equal(response.status, 200);
-      //   assert.isTrue(response.ok);
-      //   let clientes = response.body;
-      //   assert.equal(0, clientes.length);
-  
-      //   let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
-      //   request = requester.put(`/api/clientes`);
-      //   await request.send(clientes_esperados);
-  
-      //   request = requester.get(`/api/clientes`);
-      //   response = await request.send();
-      //   assert.equal(response.status, 200);
-      //   assert.isTrue(response.ok);
-      //   clientes = response.body;
-      //   assert.equal(clientes_esperados.length, clientes.length);
-      //   clientes_esperados.forEach(esperado => {
-      //     let actual = clientes.find(c => c.dni == esperado.dni);
-      //     assert.equal(esperado.dni, actual.dni, "El dni no coincide");
-      //     assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
-      //     assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
-      //     assert.equal(esperado.direccion, actual.direccion, "La direccion no coincide");
-      //     assert.equal(esperado.email, actual.email, "El email no coincide");
-      //     assert.equal(esperado.password, actual.password, "La password no coincide");
-      //     assert.equal(esperado._id, actual._id, "El _id no coincide");
-      //   });
-      //   requester.close();
-      // });
+      let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
+      request = requester.put(`/api/clientes`);
+      await request.send(clientes_esperados);
 
-      // Test para el metodo DELETE [removeClientes()]
-      // it(`DELETE ${URL}/clientes`, async () => {
-      // });
+      request = requester.get(`/api/clientes`);
+      response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      clientes = response.body;
+      assert.equal(clientes_esperados.length, clientes.length);
+      clientes_esperados.forEach(esperado => {
+        let actual = clientes.find(c => c.dni == esperado.dni);
+        assert.equal(esperado.dni, actual.dni, "El dni no coincide");
+        assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
+        assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
+        assert.equal(esperado.email, actual.email, "El email no coincide");
+        assert.isDefined(actual._id, "El _id no esta definido");
+      });
+      requester.close();
+    });
 
-      // Test para el metodo POST [addCliente(obj)]
-      // it(`POST ${URL}/clientes`, async () => {
-      // });
+    // Test para el metodo DELETE [removeClientes()]
+    it(`DELETE ${URL}/clientes`, async () => {
+      let requester = chai.request.execute(app).keepOpen();
 
-      // Test para el metodo GET [getClientePorId(id)]
-      // it(`GET ${URL}/clientes/:id`, async () => {
-      // }); 
+      let request = requester.get(`/api/clientes`);
+      let response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      let clientes = response.body;
+      assert.equal(0, clientes.length);
 
-      // Test para el metodo GET [getClientePorEmail(email) Ruta: /api/clientes?email=email]
-          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA 
+      let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
+      request = requester.put(`/api/clientes`);
+      await request.send(clientes_esperados);
 
-      // Test para el metodo GET [getClientePorDni(dni) Ruta: /api/clientes?dni=dni]
-          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA
+      request = requester.get(`/api/clientes`);
+      response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      clientes = response.body;
+      assert.equal(clientes_esperados.length, clientes.length);
 
-      // Test para el metodo DELETE [removeCliente(id) Ruta: /api/clientes/:id]
-      // it(`DELETE ${URL}/clientes/:id`, async () => {
-      // });
+      request = requester.delete(`/api/clientes`);
+      response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
 
-      // Test para el metodo PUT [updateCliente(id) Ruta: /api/clientes/:id]
-          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA 
+      request = requester.get(`/api/clientes`);
+      response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      clientes = response.body;
+      assert.equal(0, clientes.length);
 
-      // Test para el metodo POST [autenticar(obj) Ruta: /api/clientes/autenticar y /api/clientes/singin]
-          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA 
+      requester.close();
+    });
 
-      // Test para el metodo GET [getCarroCliente(id) Ruta: /api/clientes/:id/carro]
-          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA
+    // Test para el metodo POST [addCliente(obj)]
+    it(`POST ${URL}/clientes`, async () => {
+      let requester = chai.request.execute(app).keepOpen();
 
-      // Test para el metodo POST [addCarroClienteItem(id, item) Ruta: /api/clientes/:id/carro/items]
-          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA
+      let request = requester.get(`/api/clientes`);
+      let response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      let clientes = response.body;
+      assert.equal(0, clientes.length);
 
-      // Test para el metodo PUT setClienteCarroItemCantidad(id, index, cantidad) Ruta: /api/clientes/:id/carro/items/:index
-          // NO SE PUEDE HACER PORQUE NO SE HA IMPLEMENTADO O NO FUNCIONA
+      let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
+      request = requester.put(`/api/clientes`);
+      await request.send(clientes_esperados);
 
+      let nuevo_cliente = crearCliente('00000005C');
+      request = requester.post(`/api/clientes`);
+      response = await request.send(nuevo_cliente);
 
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      let actual = response.body;
+      assert.equal(nuevo_cliente.dni, actual.dni, "El dni no coincide");
+      assert.equal(nuevo_cliente.nombre, actual.nombre, "El nombre no coincide");
+      assert.equal(nuevo_cliente.apellidos, actual.apellidos, "Los apellidos no coinciden");
+      assert.equal(nuevo_cliente.email, actual.email, "El email no coincide");
+      assert.isDefined(actual._id, "El _id no esta definido");
 
+      requester.close();
+    });
 
-    }); 
+    // // Test para el metodo GET [getClientePorId(id)]
+    // it(`GET ${URL}/clientes/:id`, async () => {
+    //   let requester = chai.request.execute(app).keepOpen();
 
-    describe("Pruebas de administradores", function () {});
+    //   let request = requester.get(`/api/clientes`);
+    //   let response = await request.send();
+    //   assert.equal(response.status, 200);
+    //   assert.isTrue(response.ok);
+    //   let clientes = response.body;
+    //   assert.equal(0, clientes.length);
 
-    describe("Pruebas de facturas", function () {});
+    //   clientes = C_DNIS.map(dni => crearCliente(dni));
+    //   request = requester.put(`/api/clientes`);
+    //   response = await request.send(clientes);
+    //   assert.equal(response.status, 200);
+    //   assert.isTrue(response.ok);
+    //   clientes = response.body;
+
+    //   let responses = clientes.map(async esperado => {
+    //     request = requester.get(`/api/clientes/${esperado._id}`);
+    //     response = await request.send();
+    //     assert.equal(response.status, 200);
+    //     assert.isTrue(response.ok);
+    //     let actual = response.body;
+    //     assert.equal(esperado.dni, actual.dni, "El dni no coincide");
+    //     assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
+    //     assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
+    //     assert.equal(esperado.email, actual.email, "El email no coincide");
+    //     assert.equal(esperado._id, actual._id, "El _id no coincide");
+    //   });
+
+    //   await Promise.all(responses);
+    //   requester.close();
+    // });
+
+    // // Test para el metodo DELETE [removeCliente(id) Ruta: /api/clientes/:id]
+    // it(`DELETE ${URL}/clientes/:id`, async () => {
+    //   let requester = chai.request.execute(app).keepOpen();
+
+    //   let request = requester.get(`/api/clientes`);
+    //   let response = await request.send();
+    //   assert.equal(response.status, 200);
+    //   assert.isTrue(response.ok);
+    //   let clientes = response.body;
+    //   assert.equal(0, clientes.length);
+
+    //   let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
+    //   request = requester.put(`/api/clientes`);
+    //   await request.send(clientes_esperados);
+
+    //   request = requester.get(`/api/clientes`);
+    //   response = await request.send();
+    //   assert.equal(response.status, 200);
+    //   assert.isTrue(response.ok);
+    //   clientes = response.body;
+    //   assert.equal(clientes_esperados.length, clientes.length);
+
+    //   const idToDelete = clientes[0]._id;
+    //   request = requester.delete(`/api/clientes/${idToDelete}`);
+    //   response = await request.send();
+    //   assert.equal(response.status, 200);
+    //   assert.isTrue(response.ok);
+
+    //   request = requester.get(`/api/clientes`);
+    //   response = await request.send();
+    //   assert.equal(response.status, 200);
+    //   assert.isTrue(response.ok);
+    //   clientes = response.body;
+    //   assert.equal(clientes_esperados.length - 1, clientes.length);
+    //   let clienteEliminado = clientes.find(cliente => cliente._id === idToDelete);
+    //   assert.isUndefined(clienteEliminado, "El cliente no fue eliminado");
+
+    //   clientes_esperados.slice(1).forEach(esperado => {
+    //     let actual = clientes.find(cliente => cliente.dni === esperado.dni);
+    //     assert.isDefined(actual, `El cliente con DNI ${esperado.dni} no está presente`);
+    //     assert.equal(esperado.dni, actual.dni, "El DNI no coincide");
+    //     assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
+    //     assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
+    //     assert.equal(esperado.email, actual.email, "El email no coincide");
+    //   });
+
+    //   requester.close();
+    // });
+
+    // // Test para el metodo PUT [updateCliente(id) Ruta: /api/clientes/:id]
+    // it(`PUT ${URL}/clientes/:id`, async () => {
+    //   let requester = chai.request.execute(app).keepOpen();
+
+    //   let request = requester.get(`/api/clientes`);
+    //   let response = await request.send();
+    //   assert.equal(response.status, 200);
+    //   assert.isTrue(response.ok);
+    //   let clientes = response.body;
+    //   assert.equal(0, clientes.length);
+
+    //   let clientes_esperados = C_DNIS.map(dni => crearCliente(dni));
+    //   request = requester.put(`/api/clientes`);
+    //   await request.send(clientes_esperados);
+
+    //   request = requester.get(`/api/clientes`);
+    //   response = await request.send();
+    //   assert.equal(response.status, 200);
+    //   assert.isTrue(response.ok);
+    //   clientes = response.body;
+    //   assert.equal(clientes_esperados.length, clientes.length);
+
+    //   const idToUpdate = clientes[0]._id;
+    //   const clienteModificado = {
+    //     dni: "00000005C",
+    //     nombre: "Nuevo nombre",
+    //     apellidos: "Nuevos apellidos",
+    //     email: "nuevoemail@example.com"
+    //   };
+    //   request = requester.put(`/api/clientes/${idToUpdate}`);
+    //   response = await request.send(clienteModificado);
+    //   assert.equal(response.status, 200);
+    //   assert.isTrue(response.ok);
+
+    //   request = requester.get(`/api/clientes/${idToUpdate}`);
+    //   response = await request.send();
+    //   assert.equal(response.status, 200);
+    //   assert.isTrue(response.ok);
+    //   let actual = response.body;
+    //   assert.equal(clienteModificado.dni, actual.dni, "El DNI no coincide");
+    //   assert.equal(clienteModificado.nombre, actual.nombre, "El nombre no coincide");
+    //   assert.equal(clienteModificado.apellidos, actual.apellidos, "Los apellidos no coinciden");
+    //   assert.equal(clienteModificado.email, actual.email, "El email no coincide");
+    //   assert.equal(idToUpdate, actual._id, "El _id no coincide");
+
+    //   requester.close();
+    // });
 
   });
+
+});

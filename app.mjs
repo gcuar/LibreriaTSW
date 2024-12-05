@@ -294,19 +294,20 @@ app.post('/api/admins/autenticar', function (req, res, next) {
   });
   
   app.get('/api/clientes', function (req, res) {
-    console.log('/api/clientes');
     try {
       const clientes = model.getClientes(); // Llama al método para obtener los clientes
-      res.json(clientes); // Envía la lista de clientes como respuesta en formato JSON
+      // console.log("API GET CLIENTES:", clientes);
+      res.json(clientes); // Envía la lista de clientes como respuesta en formato JSON 
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Error al obtener los clientes' }); // Manejo de errores
     }
   });
+  
   app.put('/api/clientes', function (req, res, next) {
     let clientes = req.body;
     try {
-      res.json(model.addCliente(clientes));
+      res.json(model.setClientes(clientes));
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
