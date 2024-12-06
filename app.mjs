@@ -107,7 +107,7 @@ app.get('/api/admins', function (req, res) {
 app.put('/api/admins', function (req, res, next) {
   let admins = req.body;
   try {
-    res.json(model.addAdmin(admins));
+    res.json(model.setAdmins(admins));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -314,7 +314,7 @@ app.post('/api/admins/autenticar', function (req, res, next) {
   });
   
 app.post('/api/clientes', function (req, res, next) {
-  console.log('/api/clientes')
+  // console.log('/api/clientes')
   try {
     let usuario = model.addCliente(req.body);
     res.json(usuario);
@@ -325,7 +325,7 @@ app.post('/api/clientes', function (req, res, next) {
 })
 
 app.delete('/api/clientes/:id', function (req, res) {
-  console.log('/api/clientes/:id');
+  // console.log('/api/clientes/:id');
   try {
     const id = req.params.id; // Obtener el ID desde los parámetros de la URL
     const clienteEliminado = model.removeCliente(id); // Llamar a la función para eliminar el cliente
@@ -337,8 +337,7 @@ app.delete('/api/clientes/:id', function (req, res) {
 });
 
 app.delete('/api/clientes', function (req, res) {
-  console.log('DELETE /api/clientes');
-
+  // console.log('DELETE /api/clientes');
   try {
     const clientesEliminados = model.removeClientes(); // Llama al método removeAdmins del modelo
 
