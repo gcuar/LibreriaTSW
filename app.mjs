@@ -94,7 +94,7 @@ app.post('/api/autenticar', function (req, res, next) {
 //Admins
 
 app.get('/api/admins', function (req, res) {
-  console.log('/api/admins');
+  // console.log('/api/admins');
   try {
     const admins = model.getAdmins(); // Llama al método para obtener los clientes
     res.json(admins); // Envía la lista de clientes como respuesta en formato JSON
@@ -126,7 +126,7 @@ app.delete('/api/admins/:id', function (req, res) {
 });
 
 app.post('/api/admins', function (req, res, next) {
-  console.log('/api/admins')
+  // console.log('/api/admins')
   try {
     let usuario = model.addAdmin(req.body);
     res.json(usuario);
@@ -156,7 +156,7 @@ app.put('/api/admins/:id', function (req, res, next) {
 
 
 app.delete('/api/admins', function (req, res) {
-  console.log('DELETE /api/admins');
+  // console.log('DELETE /api/admins');
 
   try {
     const adminsEliminados = model.removeAdmins(); // Llama al método removeAdmins del modelo

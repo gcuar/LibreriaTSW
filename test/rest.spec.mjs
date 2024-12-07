@@ -10,6 +10,7 @@ const URL = '/api';
 import { crearLibro } from "../model/seeder.mjs";
 import { crearCliente } from "../model/seeder.mjs";
 import { crearAdmin } from "../model/seeder.mjs";
+import { afterEach } from "mocha";
 const ISBNS = ['978-3-16-148410-0', '978-3-16-148410-1', '978-3-16-148410-2', '978-3-16-148410-3', '978-3-16-148410-4'];
 const C_DNIS = ['00000000C', '00000001C', '00000002C', '00000003C', '00000004C'];
 const A_DNIS = ['00000000A', '00000001A', '00000002A', '00000003A', '00000004A'];
@@ -403,7 +404,7 @@ describe("REST libreria", function () {
       requester.close();
     });
 
-    beforeEach(async function () {
+    afterEach(async function () {
       let requester = chai.request.execute(app).keepOpen();
       let request = requester.put(`/api/clientes`);
       let response = await request.send([]);
@@ -657,7 +658,7 @@ describe("REST libreria", function () {
       assert.equal(response.status, 200);
       assert.isTrue(response.ok);
       let admins = response.body;
-      console.log("admines", admins.length)
+      // console.log("admines", admins.length)
       assert.equal(0, admins.length);
 
       let admins_esperados = A_DNIS.map(dni => crearAdmin(dni));
@@ -666,15 +667,12 @@ describe("REST libreria", function () {
       request = requester.put(`/api/admins`);
       response = await request.send(admins_esperados);
 
-      console.log("esperados", admins_esperados.length);
-      console.log("admines", admins)
-
       assert.equal(response.status, 200);
       assert.isTrue(response.ok);
       admins = response.body;
 
-      console.log("esperados", admins_esperados.length);
-      console.log("admines", admins)
+      // console.log("esperados", admins_esperados.length);
+      // console.log("admines", admins.length);
 
       assert.equal(admins_esperados.length, admins.length);
       admins_esperados.forEach(esperado => {
@@ -687,249 +685,153 @@ describe("REST libreria", function () {
       requester.close();
     });
 
-    // beforeEach(async function () {
-    //   let requester = chai.request.execute(app).keepOpen();
-    //   let request = requester.put(`/api/admins`);
-    //   let response = await request.send([]);
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   requester.close();
-    // });
+    afterEach(async function () {
+      let requester = chai.request.execute(app).keepOpen();
+      let request = requester.put(`/api/admins`);
+      let response = await request.send([]);
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      requester.close();
+
+    });
 
     // Test para el metodo GET [getAdmins()]
-    // it(`GET ${URL}/admins`, async () => {
-    //   let requester = chai.request.execute(app).keepOpen();
+    it(`GET ${URL}/admins`, async () => {
+      let requester = chai.request.execute(app).keepOpen();
 
-    //   let request = requester.get(`/api/admins`);
-    //   let response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   let admins = response.body;
-    //   assert.equal(0, admins.length);
+      let request = requester.get(`/api/admins`);
+      let response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      let admins = response.body;
+      assert.equal(0, admins.length);
 
-    //   let admins_esperados = A_DNIS.map(dni => crearAdmin(dni));
-    //   request = requester.put(`/api/admins`);
-    //   await request.send(admins_esperados);
+      let admins_esperados = A_DNIS.map(dni => crearAdmin(dni));
+      request = requester.put(`/api/admins`);
+      await request.send(admins_esperados);
 
-    //   request = requester.get(`/api/admins`);
-    //   response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   admins = response.body;
-    //   assert.equal(admins_esperados.length, admins.length);
-    //   admins_esperados.forEach(esperado => {
-    //     let actual = admins.find(a => a.dni == esperado.dni);
-    //     assert.equal(esperado.dni, actual.dni, "El dni no coincide");
-    //     assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
-    //     assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
-    //     assert.equal(esperado.email, actual.email, "El email no coincide");
-    //     assert.isDefined(actual._id, "El _id no esta definido");
-    //   });
-    //   requester.close();
-    // });
+      request = requester.get(`/api/admins`);
+      response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      admins = response.body;
+      assert.equal(admins_esperados.length, admins.length);
+      admins_esperados.forEach(esperado => {
+        let actual = admins.find(a => a.dni == esperado.dni);
+        assert.equal(esperado.dni, actual.dni, "El dni no coincide");
+        assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
+        assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
+        assert.equal(esperado.email, actual.email, "El email no coincide");
+        assert.isDefined(actual._id, "El _id no esta definido");
+      });
+      requester.close();
+    });
 
     // Test para el metodo DELETE [removeAdmins()]
-    // it(`DELETE ${URL}/admins`, async () => {
-    //   let requester = chai.request.execute(app).keepOpen();
+    it(`DELETE ${URL}/admins`, async () => {
+      let requester = chai.request.execute(app).keepOpen();
 
-    //   let request = requester.get(`/api/admins`);
-    //   let response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   let admins = response.body;
-    //   assert.equal(0, admins.length);
+      let request = requester.get(`/api/admins`);
+      let response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      let admins = response.body;
+      assert.equal(0, admins.length);
 
-    //   let admins_esperados = A_DNIS.map(dni => crearAdmin(dni));
-    //   request = requester.put(`/api/admins`);
-    //   await request.send(admins_esperados);
+      let admins_esperados = A_DNIS.map(dni => crearAdmin(dni));
+      request = requester.put(`/api/admins`);
+      await request.send(admins_esperados);
 
-    //   request = requester.get(`/api/admins`);
-    //   response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   admins = response.body;
-    //   assert.equal(admins_esperados.length, admins.length);
+      request = requester.get(`/api/admins`);
+      response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      admins = response.body;
+      assert.equal(admins_esperados.length, admins.length);
 
-    //   request = requester.delete(`/api/admins`);
-    //   response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
+      request = requester.delete(`/api/admins`);
+      response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
 
-    //   request = requester.get(`/api/admins`);
-    //   response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   admins = response.body;
-    //   assert.equal(0, admins.length);
+      request = requester.get(`/api/admins`);
+      response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      admins = response.body;
+      assert.equal(0, admins.length);
 
-    //   requester.close();
-    // });
+      requester.close();
+    });
 
     // Test para el metodo POST [addAdmin(obj)]
-    // it(`POST ${URL}/admins`, async () => {
-    //   let requester = chai.request.execute(app).keepOpen();
+    it(`POST ${URL}/admins`, async () => {
+      let requester = chai.request.execute(app).keepOpen();
 
-    //   let request = requester.get(`/api/admins`);
-    //   let response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   let admins = response.body;
-    //   assert.equal(0, admins.length);
+      let request = requester.get(`/api/admins`);
+      let response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      let admins = response.body;
+      assert.equal(0, admins.length);
 
-    //   let admins_esperados = A_DNIS.map(dni => crearAdmin(dni));
-    //   request = requester.put(`/api/admins`);
-    //   await request.send(admins_esperados);
+      let admins_esperados = A_DNIS.map(dni => crearAdmin(dni));
+      request = requester.put(`/api/admins`);
+      await request.send(admins_esperados);
 
-    //   let nuevo_admin = crearAdmin('00000005A');
-    //   request = requester.post(`/api/admins`);
-    //   response = await request.send(nuevo_admin);
+      let nuevo_admin = crearAdmin('00000005A');
+      request = requester.post(`/api/admins`);
+      response = await request.send(nuevo_admin);
 
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   let actual = response.body;
-    //   assert.equal(nuevo_admin.dni, actual.dni, "El dni no coincide");
-    //   assert.equal(nuevo_admin.nombre, actual.nombre, "El nombre no coincide");
-    //   assert.equal(nuevo_admin.apellidos, actual.apellidos, "Los apellidos no coinciden");
-    //   assert.equal(nuevo_admin.email, actual.email, "El email no coincide");
-    //   assert.isDefined(actual._id, "El _id no esta definido");
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      let actual = response.body;
+      assert.equal(nuevo_admin.dni, actual.dni, "El dni no coincide");
+      assert.equal(nuevo_admin.nombre, actual.nombre, "El nombre no coincide");
+      assert.equal(nuevo_admin.apellidos, actual.apellidos, "Los apellidos no coinciden");
+      assert.equal(nuevo_admin.email, actual.email, "El email no coincide");
+      assert.isDefined(actual._id, "El _id no esta definido");
 
-    //   requester.close();
-    // });
+      requester.close();
+    });
 
     // Test para el metodo GET [getAdminPorId(id) Ruta: /api/admins/:id]
-    // it(`GET ${URL}/admins/:id`, async () => {
-    //   let requester = chai.request.execute(app).keepOpen();
+    it(`GET ${URL}/admins/:id`, async () => {
+      let requester = chai.request.execute(app).keepOpen();
 
-    //   let request = requester.get(`/api/admins`);
-    //   let response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   let admins = response.body;
-    //   assert.equal(0, admins.length);
+      let request = requester.get(`/api/admins`);
+      let response = await request.send();
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      let admins = response.body;
+      assert.equal(0, admins.length);
 
-    //   admins = A_DNIS.map(dni => crearAdmin(dni));
-    //   request = requester.put(`/api/admins`);
-    //   response = await request.send(admins);
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   admins = response.body;
+      admins = A_DNIS.map(dni => crearAdmin(dni));
+      request = requester.put(`/api/admins`);
+      response = await request.send(admins);
+      assert.equal(response.status, 200);
+      assert.isTrue(response.ok);
+      admins = response.body;
 
-    //   let responses = admins.map(async esperado => {
-    //     request = requester.get(`/api/admins/${esperado._id}`);
-    //     response = await request.send();
-    //     assert.equal(response.status, 200);
-    //     assert.isTrue(response.ok);
-    //     let actual = response.body;
-    //     assert.equal(esperado.dni, actual.dni, "El dni no coincide");
-    //     assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
-    //     assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
-    //     assert.equal(esperado.email, actual.email, "El email no coincide");
-    //     assert.equal(esperado._id, actual._id, "El _id no coincide");
-    //   });
+      let responses = admins.map(async esperado => {
+        request = requester.get(`/api/admins/${esperado._id}`);
+        response = await request.send();
+        assert.equal(response.status, 200);
+        assert.isTrue(response.ok);
+        let actual = response.body;
+        assert.equal(esperado.dni, actual.dni, "El dni no coincide");
+        assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
+        assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
+        assert.equal(esperado.email, actual.email, "El email no coincide");
+        assert.equal(esperado._id, actual._id, "El _id no coincide");
+      });
 
-    //   await Promise.all(responses);
-    //   requester.close();
-    // });
+      await Promise.all(responses);
+      requester.close();
+    });
 
-    // Test para el metodo DELETE [removeAdmin(id) Ruta: /api/admins/:id]
-    // it(`DELETE ${URL}/admins/:id`, async () => {
-    //   let requester = chai.request.execute(app).keepOpen();
-
-    //   let request = requester.get(`/api/admins`);
-    //   let response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   let admins = response.body;
-    //   assert.equal(0, admins.length);
-
-    //   let admins_esperados = A_DNIS.map(dni => crearAdmin(dni));
-    //   request = requester.put(`/api/admins`);
-    //   await request.send(admins_esperados);
-
-    //   request = requester.get(`/api/admins`);
-    //   response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   admins = response.body;
-    //   assert.equal(admins_esperados.length, admins.length);
-
-    //   const idToDelete = admins[0]._id;
-    //   request = requester.delete(`/api/admins/${idToDelete}`);
-    //   response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-
-    //   request = requester.get(`/api/admins`);
-    //   response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   admins = response.body;
-    //   assert.equal(admins_esperados.length - 1, admins.length);
-    //   let adminEliminado = admins.find(admin => admin._id === idToDelete);
-    //   assert.isUndefined(adminEliminado, "El admin no fue eliminado");
-
-    //   admins_esperados.slice(1).forEach(esperado => {
-    //     let actual = admins.find(admin => admin.dni === esperado.dni);
-    //     assert.isDefined(actual, `El admin con DNI ${esperado.dni} no está presente`);
-    //     assert.equal(esperado.dni, actual.dni, "El DNI no coincide");
-    //     assert.equal(esperado.nombre, actual.nombre, "El nombre no coincide");
-    //     assert.equal(esperado.apellidos, actual.apellidos, "Los apellidos no coinciden");
-    //     assert.equal(esperado.email, actual.email, "El email no coincide");
-    //   });
-
-    //   requester.close();
-    // });
-
-    // Test para el metodo PUT [updateAdmin(id) Ruta: /api/admins/:id]
-    // it(`PUT ${URL}/admins/:id`, async () => {
-    //   let requester = chai.request.execute(app).keepOpen();
-
-    //   let request = requester.get(`/api/admins`);
-    //   let response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   let admins = response.body;
-    //   assert.equal(0, admins.length);
-
-    //   let admins_esperados = A_DNIS.map(dni => crearAdmin(dni));
-    //   request = requester.put(`/api/admins`);
-    //   await request.send(admins_esperados);
-
-    //   request = requester.get(`/api/admins`);
-    //   response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   admins = response.body;
-    //   assert.equal(admins_esperados.length, admins.length);
-
-    //   const idToUpdate = admins[0]._id;
-    //   const adminModificado = {
-    //     dni: "00000005A",
-    //     nombre: "Nuevo nombre",
-    //     apellidos: "Nuevos apellidos",
-    //     email: "nuevoemail@example.com"
-    //   };
-    //   request = requester.put(`/api/admins/${idToUpdate}`);
-    //   response = await request.send(adminModificado);
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-
-    //   request = requester.get(`/api/admins/${idToUpdate}`);
-    //   response = await request.send();
-    //   assert.equal(response.status, 200);
-    //   assert.isTrue(response.ok);
-    //   let actual = response.body;
-    //   assert.equal(adminModificado.dni, actual.dni, "El DNI no coincide");
-    //   assert.equal(adminModificado.nombre, actual.nombre, "El nombre no coincide");
-    //   assert.equal(adminModificado.apellidos, actual.apellidos, "Los apellidos no coinciden");
-    //   assert.equal(adminModificado.email, actual.email, "El email no coincide");
-    //   assert.equal(idToUpdate, actual._id, "El _id no coincide");
-
-    //   requester.close();
-    // });
 
   });
-
 
 
 });
