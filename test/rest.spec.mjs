@@ -176,6 +176,7 @@ describe("REST libreria", function () {
         requester.close();
       });
 
+      // hola
       // Test para el metodo GET [getLibroPorId(id)]
       it(`GET ${URL}/libros/:id`, async () => {
         // comentar seed
