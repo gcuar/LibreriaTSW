@@ -25,7 +25,7 @@ export class InvitadoIngresoPresenter extends Presenter {
   async ingresoClick(event) {
     event.preventDefault();
     try {
-      let usuario = this.model.autenticar(this.usuarioObject);
+      let usuario = await this.model.autenticar(this.usuarioObject);
       libreriaSession.ingreso(usuario);
       this.mensajesPresenter.mensaje(`Bienvenido ${usuario.nombre} ${usuario.apellidos}!`);
       console.log(libreriaSession, libreriaSession.esAdmin(), libreriaSession.esCliente())
