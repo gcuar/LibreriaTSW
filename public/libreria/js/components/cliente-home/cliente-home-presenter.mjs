@@ -32,7 +32,7 @@ export class ClienteHomePresenter extends Presenter {
   async refresh() {
     await super.refresh();
     await this.mensajesPresenter.refresh();
-    let libros = model.getLibros();
+    let libros = await this.model.getLibros();;
     // Importante!
     await Promise.all(libros.map(async (l) => { return await new ClienteCatalogoLibroPresenter(l, 'cliente-catalogo-libro', '#catalogo').refresh() }));
     this.salirLink.onclick = event => this.salirClick(event);
