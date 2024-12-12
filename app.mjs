@@ -4,7 +4,7 @@ import url from 'url';
 import { model } from './model/model.mjs';
 import { seed } from './model/seeder.mjs';
 import { ROL } from './model/model.mjs';
-seed();
+// seed();
 
 const STATIC_DIR = url.fileURLToPath(new URL('.', import.meta.url));
 const PORT = 3000;
@@ -94,7 +94,7 @@ app.post('/api/autenticar', function (req, res, next) {
 //Admins
 
 app.get('/api/admins', function (req, res) {
-  console.log('/api/admins');
+  // console.log('/api/admins');
   try {
     const admins = model.getAdmins(); // Llama al método para obtener los clientes
     res.json(admins); // Envía la lista de clientes como respuesta en formato JSON
@@ -107,7 +107,7 @@ app.get('/api/admins', function (req, res) {
 app.put('/api/admins', function (req, res, next) {
   let admins = req.body;
   try {
-    res.json(model.addAdmin(admins));
+    res.json(model.setAdmins(admins));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -126,7 +126,7 @@ app.delete('/api/admins/:id', function (req, res) {
 });
 
 app.post('/api/admins', function (req, res, next) {
-  console.log('/api/admins')
+  // console.log('/api/admins')
   try {
     let usuario = model.addAdmin(req.body);
     res.json(usuario);
@@ -156,7 +156,7 @@ app.put('/api/admins/:id', function (req, res, next) {
 
 
 app.delete('/api/admins', function (req, res) {
-  console.log('DELETE /api/admins');
+  // console.log('DELETE /api/admins');
 
   try {
     const adminsEliminados = model.removeAdmins(); // Llama al método removeAdmins del modelo
@@ -294,26 +294,27 @@ app.post('/api/admins/autenticar', function (req, res, next) {
   });
   
   app.get('/api/clientes', function (req, res) {
-    console.log('/api/clientes');
     try {
       const clientes = model.getClientes(); // Llama al método para obtener los clientes
-      res.json(clientes); // Envía la lista de clientes como respuesta en formato JSON
+      // console.log("API GET CLIENTES:", clientes);
+      res.json(clientes); // Envía la lista de clientes como respuesta en formato JSON 
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Error al obtener los clientes' }); // Manejo de errores
     }
   });
+  
   app.put('/api/clientes', function (req, res, next) {
     let clientes = req.body;
     try {
-      res.json(model.addCliente(clientes));
+      res.json(model.setClientes(clientes));
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });
   
 app.post('/api/clientes', function (req, res, next) {
-  console.log('/api/clientes')
+  // console.log('/api/clientes')
   try {
     let usuario = model.addCliente(req.body);
     res.json(usuario);
@@ -324,7 +325,7 @@ app.post('/api/clientes', function (req, res, next) {
 })
 
 app.delete('/api/clientes/:id', function (req, res) {
-  console.log('/api/clientes/:id');
+  // console.log('/api/clientes/:id');
   try {
     const id = req.params.id; // Obtener el ID desde los parámetros de la URL
     const clienteEliminado = model.removeCliente(id); // Llamar a la función para eliminar el cliente
@@ -336,8 +337,7 @@ app.delete('/api/clientes/:id', function (req, res) {
 });
 
 app.delete('/api/clientes', function (req, res) {
-  console.log('DELETE /api/clientes');
-
+  // console.log('DELETE /api/clientes');
   try {
     const clientesEliminados = model.removeClientes(); // Llama al método removeAdmins del modelo
 

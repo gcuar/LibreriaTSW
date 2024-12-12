@@ -1,6 +1,6 @@
 import { model, ROL } from './model.mjs';
 
-function crearLibro(isbn) {
+export function crearLibro(isbn) {
   return {
     isbn: `${isbn}`,
     titulo: `TITULO_${isbn}`,
@@ -25,14 +25,15 @@ function crearPersona(dni) {
     password: `${dni}`,
   };
 }
-function crearCliente(dni) {
+
+export function crearCliente(dni) {
   let cliente = crearPersona(dni);
   cliente.rol = ROL.CLIENTE;
   // cliente.carro = new Carro();
   return cliente;
 }
 
-function crearAdmin(dni) {
+export function crearAdmin(dni) {
   let admin = crearPersona(dni);
   admin.rol = ROL.ADMIN;
   return admin;

@@ -31,6 +31,13 @@ export class Libreria {
     return this.libros;
   }
 
+  setLibros(array) {
+    let libros = this.getLibros();
+    libros.forEach((l) => { this.removeLibro(l._id) })
+    array.forEach((l) => { this.addLibro(l) })
+    return this.libros;
+  }
+
   addLibro(obj) {
     if (!obj.isbn) throw new Error('El libro no tiene ISBN');
     if (this.getLibroPorIsbn(obj.isbn)) throw new Error(`El ISBN ${obj.isbn} ya existe`)
@@ -156,8 +163,21 @@ export class Libreria {
     return this.usuarios.filter((u) => u.rol == ROL.CLIENTE);
   }
 
+  setClientes(array) {
+    let clientes = this.getClientes();
+    clientes.forEach((c) => { this.removeCliente(c._id) });
+    array.forEach((c) => { this.addCliente(c) });
+    return this.usuarios;
+  }
+
   getAdmins() {
     return this.usuarios.filter((u) => u.rol == ROL.ADMIN);
+  }
+  setAdmins(array) {
+    let admins = this.getAdmins();
+    admins.forEach((a) => { this.removeAdmin(a._id) });
+    array.forEach((a) => { this.addAdmin(a) });
+    return this.usuarios;
   }
 
   getUsuarioPorId(_id) {
