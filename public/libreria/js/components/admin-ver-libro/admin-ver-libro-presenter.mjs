@@ -18,8 +18,10 @@ export class AdminVerLibroPresenter extends Presenter {
   }
 
   // para acceder al modelo, siempre con métodos, no con getters!
-  getLibro() {
-    return model.getLibroPorId(this.id);
+  async getLibro() {
+    let libro = await this.model.getLibroPorId(this.id);
+    // console.log(libro);
+    return libro;
   }
 
   get isbnText() {
@@ -131,7 +133,7 @@ export class AdminVerLibroPresenter extends Presenter {
     await super.refresh();
     await this.mensajesPresenter.refresh();
     console.log(this.id);
-    let libro = this.getLibro();
+    let libro = await this.getLibro();
     if (libro) this.libro = libro;
     else console.error(`Libro ${id} not found!`);
     

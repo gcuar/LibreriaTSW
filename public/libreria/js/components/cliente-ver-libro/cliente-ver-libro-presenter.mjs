@@ -19,8 +19,10 @@ export class ClienteVerLibroPresenter extends Presenter {
   }
 
   // Acceder al libro desde el modelo
-  getLibro() {
-    return model.getLibroPorId(this.id);
+  async getLibro() {
+    let libro = await this.model.getLibroPorId(this.id);
+    // console.log(libro);
+    return libro;
   }
 
   // Getters y setters para los elementos del DOM
@@ -126,7 +128,7 @@ export class ClienteVerLibroPresenter extends Presenter {
       return;
     }
 
-    const libro = this.getLibro();
+    const libro = await this.getLibro();
     if (libro) {
       this.libro = libro;
     } else {
