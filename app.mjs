@@ -1,9 +1,8 @@
 import express from 'express';
 import path from 'path';
 import url from 'url';
-import { model } from './model/model.mjs';
+import { model } from './model/model.mjs'
 import { seed } from './model/seeder.mjs';
-
 seed();
 
 const STATIC_DIR = url.fileURLToPath(new URL('.', import.meta.url));
