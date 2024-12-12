@@ -1,6 +1,6 @@
 import { mensajes } from "../../commons/mensajes.mjs";
 import { Presenter } from "../../commons/presenter.mjs";
-import { model } from "../../model/proxy.mjs";
+import { proxy } from "../../model/proxy.mjs";
 import { InvitadoCatalogoLibroPresenter } from "../invitado-catalogo-libro/invitado-catalogo-libro-presenter.mjs";
 import { MensajesPresenter } from "../mensajes/mensajes-presenter.mjs";
 
@@ -17,7 +17,8 @@ export class InvitadoHomePresenter extends Presenter {
   async refresh() {
     await super.refresh();
     await this.mensajesPresenter.refresh();
-    let libros = model.getLibros();
+    let libros = await this.model.getLibros();
+    // let libros = model.getLibros();
     // Importante!
     await Promise.all(libros.map(async (l) => { return await new InvitadoCatalogoLibroPresenter(l, 'invitado-catalogo-libro', '#catalogo').refresh() }));    
   }

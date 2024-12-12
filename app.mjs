@@ -3,8 +3,8 @@ import path from 'path';
 import url from 'url';
 import { model } from './model/model.mjs';
 import { seed } from './model/seeder.mjs';
-import { ROL } from './model/model.mjs';
-// seed();
+
+seed();
 
 const STATIC_DIR = url.fileURLToPath(new URL('.', import.meta.url));
 const PORT = 3000;
