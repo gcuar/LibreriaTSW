@@ -1,7 +1,7 @@
 import { libreriaSession } from "../../commons/libreria-session.mjs";
 import { Presenter } from "../../commons/presenter.mjs";
 import { router } from "../../commons/router.mjs";
-import { model } from "../../model/model.mjs";
+import { model } from "../../model/proxy.mjs";
 import { ROL } from "../../model/model.mjs";
 // import { Router } from "../../commons/router.mjs";
 import { MensajesPresenter } from "../mensajes/mensajes-presenter.mjs";
